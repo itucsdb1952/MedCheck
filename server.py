@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home_page():
-    return "Hello, world!"
+    return "Welcome to MedCheck Project!"
 
 
 if __name__ == "__main__":

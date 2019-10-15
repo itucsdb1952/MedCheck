@@ -1,15 +1,12 @@
-Welcome to itucsdbNN's documentation!
-=====================================
+Welcome to itucsdb1952's documentation!
+=======================================
 
-:Team: Team Name
+:Team: MedCheck
 
 :Members:
 
-   * Member 1
-   * Member 2
-   * Member 3
-   * Member 4
-   * Member 5
+   * Furkan Guvenc
+   * Emre Faruk Kolac
 
 **project description goes here (a few paragraphs)**
 
