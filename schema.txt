@@ -1,0 +1,64 @@
+Place
+    -ID
+    -City
+    -State 
+    -Mahalle
+    -Cadde
+    -Apartman No
+    -Daire No
+
+
+Hospital
+    -ID
+    -Place (ID)
+    -Rate
+    -Doctor Capacite
+    -Engelli True?False
+    -Otopark True?False
+
+
+Doctor
+    -Human (TC)
+    -Expertise
+    -Workdays
+    -Hospital
+    -Rate
+
+Human
+    -TC
+    -Passoword
+    -Photo
+    -Authorize # Doctor, human, normal
+    -Name
+    -Surname
+    -Mail
+    -Place
+    -Age
+    -Height
+    -Weight
+
+History
+    -Human
+    -Date
+    -Doctor
+    -Sick
+    -Hospital
+
+Appointment
+    -ID
+    -Date
+    -Patient(Human id)
+    -Doctor(Human id)
+    -Hospital()
+    -Feedback(Text)
+    -Doctor_rate
+    -Hospital_rate
+
+Hasta bakıcı
+Sekreter
+İlaç
+feedback
+messaging
+monitoring
+rooms
+bill
