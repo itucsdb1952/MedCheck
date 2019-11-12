@@ -15,26 +15,31 @@ def read_sql_from_file(filename: str) -> list:
 def initialize(url: str) -> None:
     with dbapi2.connect(url) as connection:
         with connection.cursor() as cursor:
+            print("Connected...", file=sys.stderr)
 
             drop_statements = read_sql_from_file('drop_tables.sql')
             for statement in drop_statements:
                 if len(statement) > 5:
                     cursor.execute(statement)
+            print("Drop tables...", file=sys.stderr)
 
             create_statements = read_sql_from_file('create_tables.sql')
             for statement in create_statements:
                 if len(statement) > 5:
                     cursor.execute(statement)
+            print("Create tables...", file=sys.stderr)
 
             add_place_statements = read_sql_from_file('places.sql')
             for statement in add_place_statements:
                 if len(statement) > 5:
                     cursor.execute(statement)
+            print("Places...", file=sys.stderr)
 
             add_hospital_statements = read_sql_from_file('hospitals.sql')
             for statement in add_hospital_statements:
                 if len(statement) > 5:
                     cursor.execute(statement)
+            print("Hospitals...", file=sys.stderr)
 
 
 if __name__ == "__main__":
@@ -42,4 +47,5 @@ if __name__ == "__main__":
     if url is None:
         print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
         sys.exit(1)
+    print("Initializing...", file=sys.stderr)
     initialize(url)
