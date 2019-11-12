@@ -18,19 +18,23 @@ def initialize(url: str) -> None:
 
             drop_statements = read_sql_from_file('drop_tables.sql')
             for statement in drop_statements:
-                cursor.execute(statement)
+                if len(statement) > 5:
+                    cursor.execute(statement)
 
             create_statements = read_sql_from_file('create_tables.sql')
             for statement in create_statements:
-                cursor.execute(statement)
+                if len(statement) > 5:
+                    cursor.execute(statement)
 
             add_place_statements = read_sql_from_file('places.sql')
             for statement in add_place_statements:
-                cursor.execute(statement)
+                if len(statement) > 5:
+                    cursor.execute(statement)
 
             add_hospital_statements = read_sql_from_file('hospitals.sql')
             for statement in add_hospital_statements:
-                cursor.execute(statement)
+                if len(statement) > 5:
+                    cursor.execute(statement)
 
 
 if __name__ == "__main__":
