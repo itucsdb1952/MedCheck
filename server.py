@@ -4,7 +4,7 @@ from flask import request
 from views import *
 
 app = Flask(__name__)
-app.secret_key = b'\xe7x\xd2\xd3\x028\xb1\xf15\xb1?\xc1\x8d\xa9\xdaz'
+# app.secret_key = b'\xe7x\xd2\xd3\x028\xb1\xf15\xb1?\xc1\x8d\xa9\xdaz'
 
 
 # @app.route("/")
