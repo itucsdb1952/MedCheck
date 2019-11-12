@@ -16,6 +16,7 @@ app = Flask(__name__)
 def admin_page():
     try:
         hospitals = get_hospitals()
+        return hospitals[1][0]
         print("Rendering...", file=sys.stderr)
     except Exception as e:
         return e
