@@ -1,5 +1,6 @@
 import psycopg2 as dbapi2
 import sys
+import os
 
 DSN = {'user': "postgres",
        'password': "1234",
@@ -17,8 +18,10 @@ def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> l
     :param district:
     :return:
     """
+
     try:
-        with dbapi2.connect(**DSN) as connection:
+        # with dbapi2.connect(os.getenv(**DSN)) as connection: TODO: LOCAL
+        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
             with connection.cursor() as cursor:
                 statement = "SELECT hospital.name, place.city, place.district, hospital.rate, hospital.handicapped, hospital.park " \
                             "FROM hospital, place "
