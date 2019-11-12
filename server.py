@@ -14,9 +14,13 @@ app.secret_key = b'\xe7x\xd2\xd3\x028\xb1\xf15\xb1?\xc1\x8d\xa9\xdaz'
 
 @app.route("/")
 def admin_page():
-    hospitals = get_hospitals()
-    print("Rendering...", file=sys.stderr)
-    return render_template('admin.html', hospitals=hospitals)
+    try:
+        hospitals = get_hospitals()
+        print("Rendering...", file=sys.stderr)
+    except Exception as e:
+        return e
+    else:
+        return render_template('admin.html', hospitals=hospitals)
 
 
 @app.route("/hebe")
