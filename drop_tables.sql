@@ -1,6 +1,6 @@
-DROP TABLE appointment;
-DROP TABLE history;
-DROP TABLE doctor;
-DROP TABLE human;
-DROP TABLE hospital;
-DROP TABLE place;
+DROP TABLE IF EXISTS appointment;
+DROP TABLE IF EXISTS history;
+DROP TABLE IF EXISTS doctor;
+DROP TABLE IF EXISTS human;
+DROP TABLE IF EXISTS hospital;
+DROP TABLE IF EXISTS place;
