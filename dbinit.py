@@ -5,7 +5,7 @@ import psycopg2 as dbapi2
 
 
 def read_sql_from_file(filename: str) -> list:
-    with open(filename, 'r') as f:
+    with open(filename, 'r', encoding='windows-1254') as f:
         content = f.read()
         content = content.split(';')
         content = [row + ";" for row in content]
