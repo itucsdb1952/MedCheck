@@ -17,6 +17,8 @@ iller = os.listdir(main_path)
 
 statements = list()
 
+hospitals_file = open('hospitals.sql', 'w')
+
 try:
     with dbapi2.connect(**DSN) as connection:
         with connection.cursor() as cursor:
@@ -31,9 +33,9 @@ try:
                     place_id = cursor.fetchone()[0]  # tuple: (1, )
                     hospitals = os.listdir(ilce_path)
                     for hosp in hospitals:
-                        insert_hosp_statement = "INSERT INTO hospital(name, address) VALUES ('{}','{}')".format(hosp,place_id)
-                        cursor.execute(insert_hosp_statement)
-
+                        insert_hosp_statement = "INSERT INTO hospital(name, address) VALUES ('{}','{}');".format(hosp,place_id)
+                        # cursor.execute(insert_hosp_statement)
+                        print(insert_hosp_statement, file=hospitals_file)
 
 except (Exception, dbapi2.Error) as error:
     print("Error while connecting to PostgreSQL", error)

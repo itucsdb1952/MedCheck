@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}ADMIN PANEL{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+      <img src="{{ url_for('static', filename = 'medchecklogo.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+    MedCheck
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Hospitals</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Doctors</a>
+      </li>
+    </ul>
+    <span class="navbar-text">
+      Profile
+    </span>
+  </div>
+</nav>
+
+    <div class="container">
+        <br>
+        <h4 class="text-center">HOSPITALS</h4>
+
+        <table class="table table-hover table-inverse">
+            <thead class="thead-inverse">
+            <tr>
+                <th>Name</th>
+                <th>Adress</th>
+                <th>Rate</th>
+                <th>Handicapped</th>
+                <th>Park</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for hospital in hospitals %}
+            <tr>
+                <td>{{ hospital[0] }}</td>
+                <td>{{ hospital[1] }}/{{ hospital[2] }}</td>
+                <td>{{ hospital[3] }}</td>
+                <td>{{ hospital[4] }}</td>
+                <td>{{ hospital[5] }}</td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
