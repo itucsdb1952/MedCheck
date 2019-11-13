@@ -20,7 +20,7 @@ def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> l
     """
 
     try:
-        # with dbapi2.connect(os.getenv(**DSN)) as connection: TODO: LOCAL
+        # with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
         with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
             with connection.cursor() as cursor:
                 statement = "SELECT hospital.name, place.city, place.district, hospital.rate, hospital.handicapped, hospital.park " \
@@ -51,4 +51,3 @@ def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> l
         if connection:
             cursor.close()
             connection.close()
-

@@ -3,6 +3,13 @@ import sys
 
 import psycopg2 as dbapi2
 
+DSN = {'user': "postgres",
+       'password': "1234",
+       'host': "127.0.0.1",
+       'port': "5432",
+       'database': "hebe2"
+       }
+
 
 def read_sql_from_file(filename: str) -> list:
     with open(filename, 'r', encoding='windows-1254') as f:
@@ -49,6 +56,7 @@ def initialize(url: str) -> None:
         if connection:
             cursor.close()
             connection.close()
+
 
 if __name__ == "__main__":
     url = os.getenv("DATABASE_URL")
