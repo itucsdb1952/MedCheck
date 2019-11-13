@@ -12,6 +12,5 @@ venv/
 docs/build/
 
 schema.txt
-static/bootstrap-4.3.1-dist/
 static/fontawesome-free-5.11.2-web/
 
