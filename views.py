@@ -60,8 +60,8 @@ def get_cities() -> list:
     """
 
     try:
-        with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
-            # with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
+        #with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
+        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
             with connection.cursor() as cursor:
                 statement = "SELECT DISTINCT city FROM place ORDER BY city"
 
@@ -86,8 +86,8 @@ def get_districts() -> list:
     """
 
     try:
-        with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
-            # with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
+        #with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
+        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
             with connection.cursor() as cursor:
                 statement = "SELECT DISTINCT district FROM place ORDER BY district"
 
@@ -113,8 +113,8 @@ def get_districts_ajax(city: str = None) -> list:
     """
 
     try:
-        with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
-            # with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
+        #with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
+        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
             with connection.cursor() as cursor:
                 if city:
                     statement = "SELECT district FROM place WHERE city = '{}'".format(city)
@@ -138,8 +138,8 @@ def get_districts_ajax(city: str = None) -> list:
 def add_hospital(name: str = None, city: str = None, district: str = None, park: bool = False,
                  handicapped: bool = True) -> str:
     try:
-        with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
-            # with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
+        #with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
+        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
             with connection.cursor() as cursor:
                 address_statement = "SELECT ID FROM place WHERE (city = '{}' AND district = '{}');".format(city,
                                                                                                           district)
