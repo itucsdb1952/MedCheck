@@ -3,7 +3,7 @@ import sys
 import os
 
 DSN = {'user': "postgres",
-       'password': "1234",
+       'password': "101095",
        'host': "127.0.0.1",
        'port': "5432",
        'database': "hebe2"

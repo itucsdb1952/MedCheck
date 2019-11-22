@@ -4,7 +4,7 @@ import sys
 import psycopg2 as dbapi2
 
 DSN = {'user': "postgres",
-       'password': "1234",
+       'password': "101095",
        'host': "127.0.0.1",
        'port': "5432",
        'database': "hebe2"
@@ -21,7 +21,7 @@ def read_sql_from_file(filename: str) -> list:
 
 def initialize(url: str) -> None:
     try:
-        with dbapi2.connect(url) as connection:
+        with dbapi2.connect(**DSN) as connection:
             with connection.cursor() as cursor:
                 print("Connected...", file=sys.stderr)
 
