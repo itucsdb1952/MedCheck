@@ -60,6 +60,21 @@ def doctors_page():
     return render_template('admin_doctors.html')
 
 
+@app.route("/log_in")
+def log_in_page():
+    return render_template("Log_in.html")
+
+
+@app.route("/register")
+def register_page():
+    return render_template("Register.html")
+
+
+@app.route("/how_to_use")
+def how_to_use_page():
+    return render_template("How to Use.html")
+
+
 @app.route("/get_districts", methods=['POST', 'GET'])
 def get_districts_ajax_page(city_name):
     print("GET DISTRICT AJAX")
