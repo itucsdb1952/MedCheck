@@ -21,7 +21,7 @@ def read_sql_from_file(filename: str) -> list:
 
 def initialize(url: str) -> None:
     try:
-        with dbapi2.connect(**DSN) as connection:
+        with dbapi2.connect(url) as connection:
             with connection.cursor() as cursor:
                 print("Connected...", file=sys.stderr)
 
