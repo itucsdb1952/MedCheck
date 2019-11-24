@@ -2,13 +2,7 @@ import os
 import sys
 
 import psycopg2 as dbapi2
-
-DSN = {'user': "postgres",
-       'password': "101095",
-       'host': "127.0.0.1",
-       'port': "5432",
-       'database': "hebe2"
-       }
+from settings import db_url
 
 
 def read_sql_from_file(filename: str) -> list:
@@ -59,9 +53,5 @@ def initialize(url: str) -> None:
 
 
 if __name__ == "__main__":
-    url = os.getenv("DATABASE_URL")
-    if url is None:
-        print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
-        sys.exit(1)
     print("Initializing...", file=sys.stderr)
-    initialize(url)
+    initialize(db_url)

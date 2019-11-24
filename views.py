@@ -1,13 +1,7 @@
 import psycopg2 as dbapi2
 import sys
 import os
-
-DSN = {'user': "postgres",
-       'password': "101095",
-       'host': "127.0.0.1",
-       'port': "5432",
-       'database': "hebe2"
-       }
+from settings import db_url
 
 
 def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> list:
@@ -20,8 +14,7 @@ def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> l
     """
 
     try:
-        # with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
-        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
+        with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
                 statement = "SELECT hospital.name, place.city, place.district, hospital.rate, hospital.handicapped, hospital.park " \
                             "FROM hospital, place "
@@ -60,8 +53,7 @@ def get_cities() -> list:
     """
 
     try:
-        #with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
-        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
+        with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
                 statement = "SELECT DISTINCT city FROM place ORDER BY city"
 
@@ -86,8 +78,7 @@ def get_districts() -> list:
     """
 
     try:
-        #with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
-        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
+        with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
                 statement = "SELECT DISTINCT district FROM place ORDER BY district"
 
@@ -113,8 +104,7 @@ def get_districts_ajax(city: str = None) -> list:
     """
 
     try:
-        #with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
-        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
+        with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
                 if city:
                     statement = "SELECT district FROM place WHERE city = '{}'".format(city)
@@ -138,11 +128,10 @@ def get_districts_ajax(city: str = None) -> list:
 def add_hospital(name: str = None, city: str = None, district: str = None, park: bool = False,
                  handicapped: bool = True) -> str:
     try:
-        #with dbapi2.connect(**DSN) as connection:  # TODO: LOCAL
-        with dbapi2.connect(os.getenv("DATABASE_URL")) as connection:  # TODO: HOST
+        with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
                 address_statement = "SELECT ID FROM place WHERE (city = '{}' AND district = '{}');".format(city,
-                                                                                                          district)
+                                                                                                           district)
                 cursor.execute(address_statement)
                 address = cursor.fetchone()[0]
 
