@@ -24,16 +24,16 @@ fg_connection_url = "dbname={} user={} password={} host={} port={}".format(DSN_f
 efk_connection_url = "dbname={} user={} password={} host={} port={}".format(DSN_efk['database'], DSN_efk['user'],
                                                                             DSN_efk['password'], DSN_efk['host'],
                                                                             DSN_efk['port'])
-HOME_PATH = os.path.expanduser("~").lower()
+HOME_PATH = os.path.expanduser("~").lower()  # home url of pc
 db_url = str()
 
 try:
-    if 'furkan' in HOME_PATH:
+    if 'furkan' in HOME_PATH:  # Pc of Furkan Güvenç
         db_url = fg_connection_url
-    elif 'app' in HOME_PATH:
-        db_url = os.getenv("DATABASE_URL")
-    else:
+    elif 'faruk' in HOME_PATH:  # Pc of Emre Faruk Kolaç
         db_url = efk_connection_url
+    elif 'app' in HOME_PATH:  # Heroku
+        db_url = os.getenv("DATABASE_URL")
 except Exception as e:
     print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
     sys.exit(1)

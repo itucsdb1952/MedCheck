@@ -31,10 +31,8 @@
                         <label for="district_select" class="col-sm-2 col-form-label">District: </label>
                         <div class="col-sm-4">
                             <select class="form-control" name="district_select" id="district_select">
-                            {% for district in districts %}
-                                 <option value="{{ district }}">{{ district }}</option>
-                            {% endfor %}
-                        </select>
+                                 <option value="">Choose a City</option>
+                            </select>
                         </div>
                     </div>
 
@@ -70,8 +68,6 @@
             <div class="col">
                 <h4 class="text-center">DELETE HOSPITAL</h4>
                 <hr>
-                {#Mustafa Inan Hospital#}
-                {#        hospital_name#}
                 <form>
                     <div class="form-group row">
                         <label for="inputtext3" class="col-sm-2 col-form-label">text</label>
@@ -134,30 +130,6 @@
 
         </div>
 
-
-        {#        <table class="table table-hover table-inverse">#}
-{#            <thead class="thead-inverse">#}
-{#            <tr>#}
-{#                <th>Name</th>#}
-{#                <th>Adress</th>#}
-{#                <th>Rate</th>#}
-{#                <th>Handicapped</th>#}
-{#                <th>Park</th>#}
-{#            </tr>#}
-{#            </thead>#}
-{#            <tbody>#}
-{#            {% for hospital in hospitals %}#}
-{#            <tr>#}
-{#                <td>{{ hospital[0] }}</td>#}
-{#                <td>{{ hospital[1] }}/{{ hospital[2] }}</td>#}
-{#                <td>{{ hospital[3] }}</td>#}
-{#                <td>{{ hospital[4] }}</td>#}
-{#                <td>{{ hospital[5] }}</td>#}
-{#            </tr>#}
-{#            {% endfor %}#}
-{##}
-{#            </tbody>#}
-{#        </table>#}
     </div>
 
 
@@ -165,34 +137,26 @@
 
 {% block JS %}
 <script>
-$( document ).ready(function() {
-let $SCRIPT_ROOT = "127.0.0.1:5000";
+$(document).ready(function() {
 
 $('#city_select').change(function () {
 
-        {#var url = $SCRIPT_ROOT + "/get_districts";#}
-        var url = $SCRIPT_ROOT + "/get_hebe";
+        var url = "/get_districts";
         var city_name = $(this).val();
-
-
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url:url,
-            data:{
+            data: {
                 'city_name':city_name
             },
             success: function (data) {
-                alert(data);
-                {#$('#district_select').html(districts);#}
+                $('#district_select').html(data);
             }
         });
 
 
     });
-
 });
-
-
 
 </script>
 {% endblock %}

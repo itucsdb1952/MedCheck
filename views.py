@@ -1,6 +1,5 @@
 import psycopg2 as dbapi2
 import sys
-import os
 from settings import db_url
 
 
@@ -48,8 +47,8 @@ def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> l
 
 def get_cities() -> list:
     """
-
-    :return:
+    Returns all cities
+    :return: python list
     """
 
     try:
