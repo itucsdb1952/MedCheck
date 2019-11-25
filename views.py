@@ -141,13 +141,30 @@ def add_hospital(name: str = None, city: str = None, district: str = None, park:
                 print("hebe")
                 return "Succesfull"
 
-
     except (Exception, dbapi2.Error) as error:
         print("Error while connecting to PostgreSQL: {}".format(error), file=sys.stderr)
         return str(error)
 
     finally:
         # closing database connection.
+        if connection:
+            cursor.close()
+            connection.close()
+
+
+def add_human(tc, password, authorize, name, surname, mail, address) -> str:
+    try:
+        with dbapi2.connect(db_url) as connection:
+            with connection.cursor() as cursor:
+                print(tc, password, authorize, name, surname, mail, address)
+                statement = "insert into human "\
+                "values ('{}','{}','{}','{}','{}','{}','{}');".format(tc, password, authorize, name, surname, mail, address)
+                cursor.execute(statement)
+                return "successful"
+
+    except (Exception, dbapi2.Error) as error:
+        return "Error"
+    finally:
         if connection:
             cursor.close()
             connection.close()

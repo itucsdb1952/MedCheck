@@ -54,6 +54,22 @@ def doctors_page():
     return render_template('admin_doctors.html')
 
 
+@app.route("/add_doctor", methods=['POST'])
+def add_doctor_page():
+    print("belki buraya gelmistir")
+    doctor_name = request.form.get("doctor_name")
+    doctor_surname = request.form.get("doctor_surname")
+    doctor_tc = request.form.get("doctor_tc")
+    doctor_password = request.form.get("doctor_password")
+    doctor_email = request.form.get("doctor_email")
+    doctor_address = request.form.get("doctor_address")
+    doctor_workdays = request.form.get("doctor_workdays")
+    doctor_expertise = request.form.get("doctor_expertise")
+    doctor_hospital = request.form.get("doctor_hospital")
+    doctor_authorize = 2
+    response = add_human(doctor_tc, doctor_password, doctor_authorize, doctor_name, doctor_surname, doctor_email, doctor_address)
+    return response
+
 @app.route("/log_in")
 def log_in_page():
     return render_template("Log_in.html")
