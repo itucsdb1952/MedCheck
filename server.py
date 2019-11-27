@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 from flask import request
+import sys
+from views import ajax,views
 
-from views import ajax
-from views import views
 app = Flask(__name__)
 
 
@@ -12,6 +12,7 @@ app = Flask(__name__)
 def admin_page():
     try:
         hospitals = views.get_hospitals()
+        print("Rendering...", file=sys.stderr)
     except Exception as e:
         return e
     else:
@@ -62,12 +63,27 @@ def add_doctor_page():
     doctor_password = request.form.get("doctor_password")
     doctor_email = request.form.get("doctor_email")
     doctor_address = request.form.get("doctor_address")
-    doctor_workdays = request.form.get("doctor_workdays")
+    doctor_workdays = "" # sonradan degistirelecek
+    day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    for i, day in enumerate(day_list):
+        if request.form.get(day) == "on":
+            doctor_workdays += str(i+1)
+    print("workdays:",doctor_workdays)
     doctor_expertise = request.form.get("doctor_expertise")
     doctor_hospital = request.form.get("doctor_hospital")
     doctor_authorize = 2
-    response = views.add_human(doctor_tc, doctor_password, doctor_authorize, doctor_name, doctor_surname, doctor_email, doctor_address)
-    return response
+    print("doctor page info",doctor_name, doctor_surname,doctor_tc)
+    response_for_human = views.add_human(doctor_tc, doctor_password, doctor_authorize, doctor_name, doctor_surname, doctor_email, doctor_address)
+    response_for_doctor = views.add_doctor(doctor_tc, doctor_workdays, doctor_expertise, doctor_hospital)
+    return response_for_human , response_for_doctor
+
+
+@app.route("/delete_doctor", methods = ['POST'])
+def delete_doctor_page():
+    doctor_tc = request.form.get("doctor_tc")
+    response_for_doctor = views.delete_doctor(doctor_tc)
+    return response_for_doctor
+
 
 @app.route("/log_in")
 def log_in_page():
@@ -86,7 +102,7 @@ def how_to_use_page():
 
 @app.route("/get_districts", methods=['POST', 'GET'])
 def get_districts_ajax_page():
-    districts = ajax.get_districts(request.form['city_name'])
+    districts = get_districts_ajax(request.form['city_name'])
     districts = [district[0] for district in districts]
     response = " ".join(['<option value="{}">{}</option>'.format(district, district) for district in districts])
     return response

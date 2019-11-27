@@ -154,3 +154,32 @@ def add_human(tc, password, authorize, name, surname, mail, address) -> str:
         if connection:
             cursor.close()
             connection.close()
+
+
+def delete_doctor(doctor_tc) -> str:
+    try:
+        with dbapi2.connect(db_url) as connection:
+            with connection.cursor() as cursor:
+                statement = "delete from doctor where id = '{}';".format(doctor_tc)
+                cursor.execute(statement)
+                return "successful"
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+
+
+def add_doctor(human_id, workdays, expertise, hospital_id):
+    try:
+        with dbapi2.connect(db_url) as connection:
+            with connection.cursor() as cursor:
+                print("yeni doktordayız")
+                statement = "insert into doctor(human, workdays, expertise, hospital)"\
+                "values('{}','{}','{}','{}');".format(human_id, workdays, expertise, hospital_id)
+                cursor.execute(statement)
+                return "successful"
+
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
