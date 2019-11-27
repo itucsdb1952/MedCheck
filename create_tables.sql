@@ -18,13 +18,13 @@ CREATE TABLE IF NOT EXISTS Hospital
 );
 
 CREATE TABLE IF NOT EXISTS Human
-  (TC INTEGER PRIMARY KEY     NOT NULL,
+  (TC CHAR PRIMARY KEY     NOT NULL,
   Password varchar(255) NOT NULL,
   Authorize varchar(255) NOT NULL, -- ADMIN, DOCTOR, STAFF, NORMAL
   Name varchar(255)    NOT NULL,
   Surname varchar(255)    NOT NULL,
   Mail varchar(255)    NOT NULL,
-  Adress INTEGER REFERENCES Place(ID) NOT NULL,
+  Address INTEGER REFERENCES Place(ID) NOT NULL,
   Age INTEGER,
   Height INTEGER,
   Weight INTEGER
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Human
 
 CREATE TABLE IF NOT EXISTS Doctor
   (ID SERIAL PRIMARY KEY     NOT NULL,
-  Human INTEGER REFERENCES Human(TC) ,
+  Human CHAR REFERENCES Human(TC) ,
   Workdays varchar(255)    NOT NULL, -- 1:monday .. 7:sunday
   Expertise varchar(255)    NOT NULL,
   Hospital INTEGER REFERENCES Hospital(ID) NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS History -- Sickness history
   (ID SERIAL PRIMARY KEY     NOT NULL,
   Date TIMESTAMP NOT NULL,
   Doctor INTEGER REFERENCES Doctor(ID),
-  Patient INTEGER REFERENCES Human(TC),
+  Patient CHAR REFERENCES Human(TC),
   Sickness varchar(255)    NOT NULL,
   Hospital INTEGER REFERENCES Hospital(ID) NOT NULL
 );
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Appointment -- Sickness history
   (ID SERIAL PRIMARY KEY     NOT NULL,
   Date TIMESTAMP NOT NULL,
   Doctor INTEGER REFERENCES Doctor(ID),
-  Patient INTEGER REFERENCES Human(TC),
+  Patient CHAR REFERENCES Human(TC),
   Sickness varchar(255)    NOT NULL,
   Feedback varchar(255)    NOT NULL,
   Hospital INTEGER REFERENCES Hospital(ID) NOT NULL,

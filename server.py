@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 from flask import request
 
-from views import *
-
+from views import ajax
+from views import views
 app = Flask(__name__)
 
 
@@ -11,8 +11,7 @@ app = Flask(__name__)
 @app.route("/")
 def admin_page():
     try:
-        hospitals = get_hospitals()
-        print("Rendering...", file=sys.stderr)
+        hospitals = views.get_hospitals()
     except Exception as e:
         return e
     else:
@@ -21,10 +20,10 @@ def admin_page():
 
 @app.route("/hospitals")
 def hospitals_page():
-    cities = get_cities()
+    cities = views.get_cities()
     cities = [city[0] for city in cities]
 
-    districts = get_districts()
+    districts = views.get_districts()
     districts = [district[0] for district in districts]
     return render_template('admin_hospitals.html', cities=cities, districts=districts)
 
@@ -44,7 +43,7 @@ def add_hospital_page():
         handicapped = True
     else:
         handicapped = False
-    response = add_hospital(hospital_name, city, district, park, handicapped)
+    response = views.add_hospital(hospital_name, city, district, park, handicapped)
 
     return response
 
@@ -67,7 +66,7 @@ def add_doctor_page():
     doctor_expertise = request.form.get("doctor_expertise")
     doctor_hospital = request.form.get("doctor_hospital")
     doctor_authorize = 2
-    response = add_human(doctor_tc, doctor_password, doctor_authorize, doctor_name, doctor_surname, doctor_email, doctor_address)
+    response = views.add_human(doctor_tc, doctor_password, doctor_authorize, doctor_name, doctor_surname, doctor_email, doctor_address)
     return response
 
 @app.route("/log_in")
@@ -87,7 +86,7 @@ def how_to_use_page():
 
 @app.route("/get_districts", methods=['POST', 'GET'])
 def get_districts_ajax_page():
-    districts = get_districts_ajax(request.form['city_name'])
+    districts = ajax.get_districts(request.form['city_name'])
     districts = [district[0] for district in districts]
     response = " ".join(['<option value="{}">{}</option>'.format(district, district) for district in districts])
     return response

@@ -3,6 +3,22 @@ import sys
 from settings import db_url
 
 
+def get_address_id(cursor, city: str, district: str) -> int:
+    """
+    It returns addres id from place table according to city and district
+    
+    :param cursor: Connection cursor
+    :param city: City
+    :param district: District
+    :return: Address id of district of city
+    """
+    address_statement = "SELECT ID FROM place WHERE (city = '{}' AND district = '{}');".format(city,
+                                                                                               district)
+    cursor.execute(address_statement)
+    address_id = cursor.fetchone()[0]
+    return address_id
+
+
 def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> list:
     """
 
@@ -95,44 +111,13 @@ def get_districts() -> list:
             connection.close()
 
 
-def get_districts_ajax(city: str = None) -> list:
-    """
-
-    :param city:
-    :return:
-    """
-
-    try:
-        with dbapi2.connect(db_url) as connection:
-            with connection.cursor() as cursor:
-                if city:
-                    statement = "SELECT district FROM place WHERE city = '{}'".format(city)
-
-                    cursor.execute(statement)
-                    record = cursor.fetchall()
-                    return record
-                else:
-                    return [('il seciniz',)]
-
-    except (Exception, dbapi2.Error) as error:
-        print("Error while connecting to PostgreSQL: {}".format(error), file=sys.stderr)
-
-    finally:
-        # closing database connection.
-        if connection:
-            cursor.close()
-            connection.close()
-
-
 def add_hospital(name: str = None, city: str = None, district: str = None, park: bool = False,
                  handicapped: bool = True) -> str:
     try:
         with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
-                address_statement = "SELECT ID FROM place WHERE (city = '{}' AND district = '{}');".format(city,
-                                                                                                           district)
-                cursor.execute(address_statement)
-                address = cursor.fetchone()[0]
+
+                address = get_address_id(cursor, city, district)
 
                 add_statement = "INSERT INTO hospital(name, address,park,handicapped) " \
                                 "VALUES('{}',{},'{}','{}');".format(name, address, park, handicapped)
@@ -157,8 +142,9 @@ def add_human(tc, password, authorize, name, surname, mail, address) -> str:
         with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
                 print(tc, password, authorize, name, surname, mail, address)
-                statement = "insert into human "\
-                "values ('{}','{}','{}','{}','{}','{}','{}');".format(tc, password, authorize, name, surname, mail, address)
+                statement = "insert into human " \
+                            "values ('{}','{}','{}','{}','{}','{}','{}');".format(tc, password, authorize, name,
+                                                                                  surname, mail, address)
                 cursor.execute(statement)
                 return "successful"
 
