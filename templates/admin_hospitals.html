@@ -68,63 +68,40 @@
             <div class="col">
                 <h4 class="text-center">DELETE HOSPITAL</h4>
                 <hr>
-                <form>
+                <form method="POST" action="/del_hospital">
                     <div class="form-group row">
-                        <label for="inputtext3" class="col-sm-2 col-form-label">text</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputtext3" placeholder="text">
+                        <label for="city_select_del" class="col-sm-2 col-form-label">City: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="city_select_del" id="city_select_del">
+                                {% for city in cities %}
+                                     <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+
+                        </select>
+                        </div>
+
+                        <label for="district_select_del" class="col-sm-2 col-form-label">District: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="district_select_del" id="district_select_del">
+                                 <option value="">Choose a City</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+                        <label for="hospital_select_del" class="col-sm-2 col-form-label">Hospital: </label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-                        </div>
-                    </div>
-                    <fieldset class="form-group">
-                        <div class="row">
-                            <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-                            <div class="col-sm-10">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1"
-                                           value="option1" checked>
-                                    <label class="form-check-label" for="gridRadios1">
-                                        First radio
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2"
-                                           value="option2">
-                                    <label class="form-check-label" for="gridRadios2">
-                                        Second radio
-                                    </label>
-                                </div>
-                                <div class="form-check disabled">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3"
-                                           value="option3" disabled>
-                                    <label class="form-check-label" for="gridRadios3">
-                                        Third disabled radio
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <div class="form-group row">
-                        <div class="col-sm-2">Checkbox</div>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="gridCheck1">
-                                <label class="form-check-label" for="gridCheck1">
-                                    Example checkbox
-                                </label>
-                            </div>
+                            <select class="form-control" name="hospital_select_del" id="hospital_select_del">
+                                 <option value="">Choose a Hospital</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-10">
-                            <button type="submit" class="btn btn-primary">Sign in</button>
+                            <button type="submit" id="hebe" class="btn btn-danger">Delete hospital</button>
                         </div>
                     </div>
+
+
                 </form>
             </div>
 
@@ -138,6 +115,7 @@
 {% block JS %}
 <script>
 $(document).ready(function() {
+
 
 $('#city_select').change(function () {
 
@@ -153,9 +131,42 @@ $('#city_select').change(function () {
                 $('#district_select').html(data);
             }
         });
-
-
     });
+
+$('#city_select_del').change(function () {
+
+        var url = "/get_districts";
+        var city_name = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city_name':city_name
+            },
+            success: function (data) {
+                $('#district_select_del').html(data);
+            }
+        });
+    });
+
+$('#district_select_del').change(function () {
+
+        var url = "/get_hospitals";
+        var city_name = $('#city_select_del').val();
+        var district_name = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city_name':city_name,
+                'district_name':district_name
+            },
+            success: function (data) {
+                $('#hospital_select_del').html(data);
+            }
+        });
+    });
+
 });
 
 </script>

@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask import request
 import sys
-from views import ajax, views
+from views import views, helpers
+from models import Place, Hospital
 
 app = Flask(__name__)
 
@@ -21,12 +22,10 @@ def admin_page():
 
 @app.route("/hospitals")
 def hospitals_page():
-    cities = views.get_cities()
-    cities = [city[0] for city in cities]
+    places = Place().get_objects(distinct_city=True)
+    cities = [place.city for place in places]
 
-    districts = views.get_districts()
-    districts = [district[0] for district in districts]
-    return render_template('admin_hospitals.html', cities=cities, districts=districts)
+    return render_template('admin_hospitals.html', cities=cities)
 
 
 @app.route("/add_hospital", methods=['POST'])
@@ -34,19 +33,19 @@ def add_hospital_page():
     hospital_name = request.form.get('hospital_name')
     city = request.form.get('city_select')
     district = request.form.get('district_select')
-    park = request.form.get('park')
-    if park == 'on':
-        park = True
-    else:
-        park = False
-    handicapped = request.form.get('handicapped')
-    if handicapped == 'on':
-        handicapped = True
-    else:
-        handicapped = False
+    park = helpers.checkbox_to_bool(request.form.get('park'))
+    handicapped = helpers.checkbox_to_bool(request.form.get('handicapped'))
+
     response = views.add_hospital(hospital_name, city, district, park, handicapped)
 
-    return response
+    return redirect('/')
+
+
+@app.route("/del_hospital", methods=['POST'])
+def del_hospital():
+    hospital_id = request.form.get('hospital_select_del')
+    Hospital(id=hospital_id).delete()
+    return redirect('/')
 
 
 @app.route("/doctors")
@@ -103,9 +102,17 @@ def how_to_use_page():
 
 @app.route("/get_districts", methods=['POST', 'GET'])
 def get_districts_ajax_page():
-    districts = ajax.get_districts(request.form['city_name'])
-    districts = [district[0] for district in districts]
-    response = " ".join(['<option value="{}">{}</option>'.format(district, district) for district in districts])
+    places = Place(request.form.get('city_name')).get_objects()
+    response = " ".join(['<option value="{}">{}</option>'.format(place.district, place.district) for place in places])
+    return response
+
+
+@app.route("/get_hospitals", methods=['POST', 'GET'])
+def get_hospitals_ajax_page():
+    place = Place(request.form.get('city_name'), request.form.get('district_name'), ).get_objects()[0]
+    hospitals = Hospital(address=place).get_objects()
+    response = " ".join(
+        ['<option value="{}">{}</option>'.format(hospital.id, hospital.name) for hospital in hospitals])
     return response
 
 
