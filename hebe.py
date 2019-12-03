@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS Human
   Name varchar(255)    NOT NULL,
   Surname varchar(255)    NOT NULL,
   Mail varchar(255)    NOT NULL,
-  Adress INTEGER REFERENCES Place(ID) NOT NULL,
+  Address INTEGER REFERENCES Place(ID) NOT NULL,
   Age INTEGER,
   Height INTEGER,
   Weight INTEGER

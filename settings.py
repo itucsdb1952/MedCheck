@@ -37,3 +37,5 @@ try:
 except Exception as e:
     print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
     sys.exit(1)
+
+SQL_DIR = "sqls"

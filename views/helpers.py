@@ -3,3 +3,8 @@ def checkbox_to_bool(checkbox_value: str) -> bool:
         return True
     else:
         return False
+
+
+def create_where(args):
+    initial = "WHERE ({});"
+

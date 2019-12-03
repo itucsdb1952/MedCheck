@@ -36,7 +36,8 @@ def add_hospital_page():
     park = helpers.checkbox_to_bool(request.form.get('park'))
     handicapped = helpers.checkbox_to_bool(request.form.get('handicapped'))
 
-    response = views.add_hospital(hospital_name, city, district, park, handicapped)
+    p = Place(city, district).get_objects()[0]
+    Hospital(hospital_name, p.id, park=park, handicapped=handicapped).save()
 
     return redirect('/')
 
@@ -100,17 +101,17 @@ def how_to_use_page():
     return render_template("How to Use.html")
 
 
-@app.route("/get_districts", methods=['POST', 'GET'])
-def get_districts_ajax_page():
+@app.route("/get_districts", methods=['POST'])
+def get_districts_ajax():
     places = Place(request.form.get('city_name')).get_objects()
     response = " ".join(['<option value="{}">{}</option>'.format(place.district, place.district) for place in places])
     return response
 
 
-@app.route("/get_hospitals", methods=['POST', 'GET'])
-def get_hospitals_ajax_page():
+@app.route("/get_hospitals", methods=['POST'])
+def get_hospitals_ajax():
     place = Place(request.form.get('city_name'), request.form.get('district_name'), ).get_objects()[0]
-    hospitals = Hospital(address=place).get_objects()
+    hospitals = Hospital(address=place.id).get_objects()
     response = " ".join(
         ['<option value="{}">{}</option>'.format(hospital.id, hospital.name) for hospital in hospitals])
     return response

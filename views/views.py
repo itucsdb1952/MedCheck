@@ -61,56 +61,6 @@ def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> l
             connection.close()
 
 
-def get_cities() -> list:
-    """
-    Returns all cities
-    :return: python list
-    """
-
-    try:
-        with dbapi2.connect(db_url) as connection:
-            with connection.cursor() as cursor:
-                statement = "SELECT DISTINCT city FROM place ORDER BY city"
-
-                cursor.execute(statement)
-                record = cursor.fetchall()
-                return record
-
-    except (Exception, dbapi2.Error) as error:
-        print("Error while connecting to PostgreSQL: {}".format(error), file=sys.stderr)
-
-    finally:
-        # closing database connection.
-        if connection:
-            cursor.close()
-            connection.close()
-
-
-def get_districts() -> list:
-    """
-
-    :return:
-    """
-
-    try:
-        with dbapi2.connect(db_url) as connection:
-            with connection.cursor() as cursor:
-                statement = "SELECT DISTINCT district FROM place ORDER BY district"
-
-                cursor.execute(statement)
-                record = cursor.fetchall()
-                return record
-
-    except (Exception, dbapi2.Error) as error:
-        print("Error while connecting to PostgreSQL: {}".format(error), file=sys.stderr)
-
-    finally:
-        # closing database connection.
-        if connection:
-            cursor.close()
-            connection.close()
-
-
 def add_hospital(name: str = None, city: str = None, district: str = None, park: bool = False,
                  handicapped: bool = True) -> str:
     try:
