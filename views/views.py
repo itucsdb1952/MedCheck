@@ -134,7 +134,7 @@ def add_doctor(human_id, workdays, expertise, hospital_id):
             cursor.close()
             connection.close()
 
-"""def log_in(tc, password):
+def log_in(tc, password):
     try:
         with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
@@ -146,4 +146,4 @@ def add_doctor(human_id, workdays, expertise, hospital_id):
         if connection:
             cursor.close()
             connection.close()
-"""
+

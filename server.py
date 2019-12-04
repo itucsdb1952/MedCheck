@@ -90,10 +90,10 @@ def delete_doctor_page():
 def log_in_page():
     return render_template("Log_in.html")
 
-#@app.route("/log_in_check",methods=['POST'])
-#def log_in_check():
-#    tc = request.form.get("tc")
-#    password = request.form.get("password")
+@app.route("/log_in_check",methods=['POST'])
+def log_in_check():
+    tc = request.form.get("tc")
+    password = request.form.get("password")
 
 
 
