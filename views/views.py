@@ -133,3 +133,17 @@ def add_doctor(human_id, workdays, expertise, hospital_id):
         if connection:
             cursor.close()
             connection.close()
+
+"""def log_in(tc, password):
+    try:
+        with dbapi2.connect(db_url) as connection:
+            with connection.cursor() as cursor:
+                statement = "select password from human where(tc='{}');".format(tc)
+                a = cursor.execute(statement)
+                print("a:",a)
+
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+"""

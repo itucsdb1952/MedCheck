@@ -90,10 +90,30 @@ def delete_doctor_page():
 def log_in_page():
     return render_template("Log_in.html")
 
+#@app.route("/log_in_check",methods=['POST'])
+#def log_in_check():
+#    tc = request.form.get("tc")
+#    password = request.form.get("password")
+
+
+
 
 @app.route("/register")
 def register_page():
     return render_template("Register.html")
+
+@app.route("/add_person", methods=['POST'])
+def add_person():
+    name = request.form.get("name")
+    surname = request.form.get("surname")
+    tc = request.form.get("tc")
+    email = request.form.get("email")
+    address = request.form.get("address")
+    password = request.form.get("password")
+    authorization = request.form.get("authorization")
+    response_for_person = views.add_human(tc,password,authorization,name,surname,email,address)
+    return response_for_person
+
 
 
 @app.route("/how_to_use")
