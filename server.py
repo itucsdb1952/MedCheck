@@ -94,6 +94,8 @@ def log_in_page():
 def log_in_check():
     tc = request.form.get("tc")
     password = request.form.get("password")
+    response_for_log_in = views.log_in(tc,password)
+    return response_for_log_in
 
 
 

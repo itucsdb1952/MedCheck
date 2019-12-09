@@ -138,10 +138,12 @@ def log_in(tc, password):
     try:
         with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
-                statement = "select password from human where(tc='{}');".format(tc)
-                a = cursor.execute(statement)
-                print("a:",a)
-
+                statement = "select password from human where tc='{}';".format(tc)
+                cursor.execute(statement)
+                result = cursor.fetchone()[0]
+                if result == password:
+                    return "congrats"
+                return "sth is wrong"
     finally:
         if connection:
             cursor.close()

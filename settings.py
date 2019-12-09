@@ -2,7 +2,7 @@ import os.path
 import sys
 
 DSN_efk = {'user': "postgres",  # DSN for Emre Faruk Kolaç
-           'password': "101095",
+           'password': "",
            'host': "127.0.0.1",
            'port': "5432",
            'database': "hebe2"
