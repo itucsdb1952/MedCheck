@@ -149,3 +149,12 @@ def log_in(tc, password):
             cursor.close()
             connection.close()
 
+
+def select_doctor(id):
+    try:
+        with dbapi2.connect(db_url) as connection:
+            with connection.cursor() as cursor:
+                return "sth"
+    finally:
+        if connection:
+            print("s")

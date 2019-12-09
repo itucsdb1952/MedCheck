@@ -54,6 +54,11 @@ def doctors_page():
     return render_template('admin_doctors.html')
 
 
+@app.route("/hospital_patient")
+def hospital_patient_page():
+    return render_template('hospital_patient.html')
+
+
 @app.route("/add_doctor", methods=['POST'])
 def add_doctor_page():
     print("belki buraya gelmistir")
@@ -104,6 +109,7 @@ def log_in_check():
 def register_page():
     return render_template("Register.html")
 
+
 @app.route("/add_person", methods=['POST'])
 def add_person():
     name = request.form.get("name")
@@ -113,7 +119,7 @@ def add_person():
     address = request.form.get("address")
     password = request.form.get("password")
     authorization = request.form.get("authorization")
-    response_for_person = views.add_human(tc,password,authorization,name,surname,email,address)
+    response_for_person = views.add_human(tc, password, authorization, name, surname, email, address)
     return response_for_person
 
 
