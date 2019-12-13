@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, url_for
 from flask import request
 import sys
 from views import views, helpers
@@ -12,12 +12,13 @@ app = Flask(__name__)
 @app.route("/")
 def admin_page():
     try:
-        hospitals = views.get_hospitals()
-        print("Rendering...", file=sys.stderr)
+        hospitals = views.get_hospitals_with_place()
+
     except Exception as e:
         return e
     else:
-        return render_template('admin.html', hospitals=hospitals)
+        url = url_for('admin_page')
+        return render_template('admin.html', hospitals=hospitals,url=url)
 
 
 @app.route("/hospitals")

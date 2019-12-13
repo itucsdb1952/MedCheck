@@ -3,23 +3,7 @@ import sys
 from settings import db_url
 
 
-def get_address_id(cursor, city: str, district: str) -> int:
-    """
-    It returns addres id from place table according to city and district
-    
-    :param cursor: Connection cursor
-    :param city: City
-    :param district: District
-    :return: Address id of district of city
-    """
-    address_statement = "SELECT ID FROM place WHERE (city = '{}' AND district = '{}');".format(city,
-                                                                                               district)
-    cursor.execute(address_statement)
-    address_id = cursor.fetchone()[0]
-    return address_id
-
-
-def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> list:
+def get_hospitals_with_place(limit: int = 100, city: str = None, district: str = None) -> list:
     """
 
     :param limit:
@@ -53,32 +37,6 @@ def get_hospitals(limit: int = 100, city: str = None, district: str = None) -> l
 
     except (Exception, dbapi2.Error) as error:
         print("Error while connecting to PostgreSQL: {}".format(error), file=sys.stderr)
-
-    finally:
-        # closing database connection.
-        if connection:
-            cursor.close()
-            connection.close()
-
-
-def add_hospital(name: str = None, city: str = None, district: str = None, park: bool = False,
-                 handicapped: bool = True) -> str:
-    try:
-        with dbapi2.connect(db_url) as connection:
-            with connection.cursor() as cursor:
-
-                address = get_address_id(cursor, city, district)
-
-                add_statement = "INSERT INTO hospital(name, address,park,handicapped) " \
-                                "VALUES('{}',{},'{}','{}');".format(name, address, park, handicapped)
-
-                cursor.execute(add_statement)
-                print("hebe")
-                return "Succesfull"
-
-    except (Exception, dbapi2.Error) as error:
-        print("Error while connecting to PostgreSQL: {}".format(error), file=sys.stderr)
-        return str(error)
 
     finally:
         # closing database connection.
@@ -124,8 +82,8 @@ def add_doctor(human_id, workdays, expertise, hospital_id):
         with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
                 print("yeni doktordayız")
-                statement = "insert into doctor(human, workdays, expertise, hospital)"\
-                "values('{}','{}','{}','{}');".format(human_id, workdays, expertise, hospital_id)
+                statement = "insert into doctor(human, workdays, expertise, hospital)" \
+                            "values('{}','{}','{}','{}');".format(human_id, workdays, expertise, hospital_id)
                 cursor.execute(statement)
                 return "successful"
 
@@ -133,6 +91,7 @@ def add_doctor(human_id, workdays, expertise, hospital_id):
         if connection:
             cursor.close()
             connection.close()
+
 
 def log_in(tc, password):
     try:
