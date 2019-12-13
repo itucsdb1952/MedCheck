@@ -18,9 +18,9 @@ CREATE TABLE IF NOT EXISTS Hospital
 );
 
 CREATE TABLE IF NOT EXISTS Human
-  (TC CHAR PRIMARY KEY     NOT NULL,
+  (TC CHAR(9) PRIMARY KEY     NOT NULL,
   Password varchar(255) NOT NULL,
-  Authorize varchar(255) NOT NULL DEFAULT 'normal', -- ADMIN, DOCTOR, STAFF, NORMAL
+  Authorize varchar(255) NOT NULL DEFAULT 'normal', -- ADMIN, DOCTOR, NORMAL
   Name varchar(255)    NOT NULL,
   Surname varchar(255)    NOT NULL,
   Mail varchar(255)    NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS Human
 );
 
 CREATE TABLE IF NOT EXISTS Doctor
-  (HumanTC CHAR REFERENCES Human(TC) ,
+  (HumanTC CHAR(9) REFERENCES Human(TC) ,
   Workdays varchar(255)    NOT NULL, -- 1:monday .. 7:sunday
   Expertise varchar(255)    NOT NULL,
   Hospital INTEGER REFERENCES Hospital(ID) NOT NULL,

@@ -1,8 +1,8 @@
 from flask import Flask, render_template, redirect, url_for
 from flask import request
-import sys
+
 from views import views, helpers
-from models import Place, Hospital
+from models import Place, Hospital, Human, Doctor
 
 app = Flask(__name__)
 
@@ -18,7 +18,8 @@ def admin_page():
         return e
     else:
         url = url_for('admin_page')
-        return render_template('admin.html', hospitals=hospitals,url=url)
+
+        return render_template('admin.html', hospitals=hospitals, url=url)
 
 
 @app.route("/hospitals")
@@ -63,47 +64,53 @@ def hospital_patient_page():
 @app.route("/add_doctor", methods=['POST'])
 def add_doctor_page():
     print("belki buraya gelmistir")
-    doctor_name = request.form.get("doctor_name")
-    doctor_surname = request.form.get("doctor_surname")
-    doctor_tc = request.form.get("doctor_tc")
-    doctor_password = request.form.get("doctor_password")
-    doctor_email = request.form.get("doctor_email")
-    doctor_address = request.form.get("doctor_address")
-    doctor_workdays = ""  # sonradan degistirelecek
+    name = request.form.get("doctor_name")
+    surname = request.form.get("doctor_surname")
+    tc = request.form.get("doctor_tc")
+    password = request.form.get("doctor_password")
+    email = request.form.get("doctor_email")
+    address = request.form.get("doctor_address")
+    workdays = str()
     day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     for i, day in enumerate(day_list):
         if request.form.get(day) == "on":
-            doctor_workdays += str(i + 1)
-    print("workdays:", doctor_workdays)
-    doctor_expertise = request.form.get("doctor_expertise")
-    doctor_hospital = request.form.get("doctor_hospital")
-    doctor_authorize = 2
-    print("doctor page info", doctor_name, doctor_surname, doctor_tc)
-    response_for_human = views.add_human(doctor_tc, doctor_password, doctor_authorize, doctor_name, doctor_surname,
-                                         doctor_email, doctor_address)
-    response_for_doctor = views.add_doctor(doctor_tc, doctor_workdays, doctor_expertise, doctor_hospital)
-    return response_for_human, response_for_doctor
+            workdays += str(i + 1)
+    print("workdays:", workdays)
+    expertise = request.form.get("doctor_expertise")
+    hospital_name = request.form.get("doctor_hospital")
+    print("doctor page info", name, surname, tc)
+
+    human_for_check = Human(tc=tc).get_object()
+    if human_for_check is None:
+        human = Human(tc=tc, password=password, authorize='doctor', name=name, surname=surname, mail=email,
+                      address=address)
+        human.save()
+        doctor = Doctor(human=human, workdays=workdays, expertise=expertise, hospital=hospital_name)
+        doctor.save()
+
+    return redirect(url_for('doctors_page'))
 
 
 @app.route("/delete_doctor", methods=['POST'])
 def delete_doctor_page():
-    doctor_tc = request.form.get("doctor_tc")
-    response_for_doctor = views.delete_doctor(doctor_tc)
-    return response_for_doctor
+    tc = request.form.get("doctor_tc")
+    human_for_check = Human(tc=tc).get_object()
+    if human_for_check is not None:
+        Doctor(human=human_for_check).delete()
+    return redirect(url_for('doctors_page'))
 
 
 @app.route("/log_in")
 def log_in_page():
     return render_template("Log_in.html")
 
-@app.route("/log_in_check",methods=['POST'])
+
+@app.route("/log_in_check", methods=['POST'])
 def log_in_check():
     tc = request.form.get("tc")
     password = request.form.get("password")
-    response_for_log_in = views.log_in(tc,password)
+    response_for_log_in = views.log_in(tc, password)
     return response_for_log_in
-
-
 
 
 @app.route("/register")
@@ -120,9 +127,13 @@ def add_person():
     address = request.form.get("address")
     password = request.form.get("password")
     authorization = request.form.get("authorization")
-    response_for_person = views.add_human(tc, password, authorization, name, surname, email, address)
-    return response_for_person
+    human_for_check = Human(tc=tc).get_object()
+    if human_for_check is None:
+        human = Human(tc=tc, password=password, authorize=authorization, name=name, surname=surname, mail=email,
+                      address=address)
+        human.save()
 
+    return redirect(url_for('log_in_page'))
 
 
 @app.route("/how_to_use")

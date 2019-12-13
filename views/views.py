@@ -68,7 +68,7 @@ def delete_doctor(doctor_tc) -> str:
     try:
         with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
-                statement = "delete from doctor where id = '{}';".format(doctor_tc)
+                statement = "delete from doctor where humantc = '{}';".format(doctor_tc)
                 cursor.execute(statement)
                 return "successful"
     finally:

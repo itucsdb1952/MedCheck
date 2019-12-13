@@ -343,9 +343,9 @@ class Human:
         self.surname = None
         self.mail = None
         self.address = None
-        self.age = None  # not needed
-        self.weight = None  # not needed
-        self.height = None  # not needed
+        self.age = 0  # not needed
+        self.weight = 0  # not needed
+        self.height = 0  # not needed
 
         if len(args) >= 10:
             self.tc, self.password, self.authorize, self.name, self.surname, self.mail, self.address, self.age, self.weight, self.height = args[
@@ -427,7 +427,7 @@ class Human:
     def get_object(self) -> object:
         """
         READ
-        It returns object according to id
+        It returns object according to tc
         :return: object
         """
         try:
@@ -609,7 +609,7 @@ class Doctor:
     def get_object(self) -> object:
         """
         READ
-        It returns object according to id
+        It returns object according to tc
         :return: object
         """
         try:
