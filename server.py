@@ -53,7 +53,10 @@ def del_hospital():
 
 @app.route("/doctors")
 def doctors_page():
-    return render_template('admin_doctors.html')
+    places = Place().get_objects(distinct_city=True)
+    cities = [place.city for place in places]
+
+    return render_template('admin_doctors.html', cities=cities)
 
 
 @app.route("/hospital_patient")
@@ -62,14 +65,16 @@ def hospital_patient_page():
 
 
 @app.route("/add_doctor", methods=['POST'])
-def add_doctor_page():
+def add_doctor():
     print("belki buraya gelmistir")
     name = request.form.get("doctor_name")
     surname = request.form.get("doctor_surname")
     tc = request.form.get("doctor_tc")
     password = request.form.get("doctor_password")
     email = request.form.get("doctor_email")
-    address = request.form.get("doctor_address")
+    city = request.form.get("city_select_add")
+    district = request.form.get("district_select_add")
+    address = Place(city=city, district=district).get_objects()[0]
     workdays = str()
     day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     for i, day in enumerate(day_list):
@@ -77,22 +82,27 @@ def add_doctor_page():
             workdays += str(i + 1)
     print("workdays:", workdays)
     expertise = request.form.get("doctor_expertise")
-    hospital_name = request.form.get("doctor_hospital")
+    hospital_id = request.form.get("hospital_select_add")
+    hospital = Hospital(id=hospital_id).get_object()
     print("doctor page info", name, surname, tc)
 
-    human_for_check = Human(tc=tc).get_object()
-    if human_for_check is None:
+    human = Human(tc=tc).get_object()
+    if human is None:
         human = Human(tc=tc, password=password, authorize='doctor', name=name, surname=surname, mail=email,
                       address=address)
         human.save()
-        doctor = Doctor(human=human, workdays=workdays, expertise=expertise, hospital=hospital_name)
+
+    doctor = Doctor(human=human).get_object()
+    if doctor is None:
+        doctor = Doctor(human=human, workdays=workdays, expertise=expertise, hospital=hospital)
         doctor.save()
+    #  else doctor is already created
 
     return redirect(url_for('doctors_page'))
 
 
 @app.route("/delete_doctor", methods=['POST'])
-def delete_doctor_page():
+def delete_doctor():
     tc = request.form.get("doctor_tc")
     human_for_check = Human(tc=tc).get_object()
     if human_for_check is not None:
@@ -150,8 +160,8 @@ def get_districts_ajax():
 
 @app.route("/get_hospitals", methods=['POST'])
 def get_hospitals_ajax():
-    place = Place(request.form.get('city_name'), request.form.get('district_name'), ).get_objects()[0]
-    hospitals = Hospital(address=place.id).get_objects()
+    place = Place(request.form.get('city_name'), request.form.get('district_name')).get_objects()[0]
+    hospitals = Hospital(address=place).get_objects()
     response = " ".join(
         ['<option value="{}">{}</option>'.format(hospital.id, hospital.name) for hospital in hospitals])
     return response

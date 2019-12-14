@@ -18,37 +18,57 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="doctor_select" class="col-sm-2 col-form-label">Surname: </label>
+                        <label for="doctor_surname" class="col-sm-2 col-form-label">Surname: </label>
                         <div class="col-sm-10">
-                            <input type="text" name="doctor_surname" class="form-control" id="doctor_name" placeholder="Karatay">
+                            <input type="text" name="doctor_surname" class="form-control" id="doctor_surname" placeholder="Karatay">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="doctor_select" class="col-sm-2 col-form-label">TC: </label>
+                        <label for="doctor_tc" class="col-sm-2 col-form-label">TC: </label>
                         <div class="col-sm-10">
-                            <input type="text" name="doctor_tc" class="form-control" id="doctor_name" placeholder="Must be legit TC no">
+                            <input type="text" name="doctor_tc" class="form-control" id="doctor_tc" placeholder="Must be legit TC no">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="doctor_select" class="col-sm-2 col-form-label">Password: </label>
+                        <label for="doctor_password" class="col-sm-2 col-form-label">Password: </label>
                         <div class="col-sm-10">
-                            <input type="text" name="doctor_password" class="form-control" id="doctor_name" placeholder="Password assigned to the doctor">
+                            <input type="text" name="doctor_password" class="form-control" id="doctor_password" placeholder="Password assigned to the doctor">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="doctor_select" class="col-sm-2 col-form-label">E-mail: </label>
+                        <label for="doctor_email" class="col-sm-2 col-form-label">E-mail: </label>
                         <div class="col-sm-10">
-                            <input type="text" name="doctor_email" class="form-control" id="doctor_name" placeholder="Will be used to contact">
+                            <input type="text" name="doctor_email" class="form-control" id="doctor_email" placeholder="Will be used to contact">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="doctor_select" class="col-sm-2 col-form-label">Address: </label>
-                        <div class="col-sm-10">
-                            <input type="text" name="doctor_address" class="form-control" id="doctor_name" placeholder="Must be specific">
+                        <label for="city_select_add" class="col-sm-2 col-form-label">City: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="city_select_add" id="city_select_add">
+                                {% for city in cities %}
+                                     <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+
+                        </select>
+                        </div>
+
+                        <label for="district_select_add" class="col-sm-2 col-form-label">District: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="district_select_add" id="district_select_add">
+                                 <option value="">Choose a City</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-2">Park: </div>
+                        <label for="hospital_select_add" class="col-sm-2 col-form-label">Hospital: </label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="hospital_select_add" id="hospital_select_add">
+                                 <option value="">Choose a Hospital</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-2">Workdays: </div>
                         <div class="col-sm-4">
                             <div class="form-check">
                                 <input class="form-check-input" name="Monday" type="checkbox" id="gridCheck1">
@@ -88,12 +108,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="doctor_select" class="col-sm-2 col-form-label">Hospital: </label>
-                        <div class="col-sm-10">
-                            <input type="text" name="doctor_hospital" class="form-control" id="doctor_name" placeholder="Hospital of the doctor">
-                        </div>
-                    </div>
 
                     <div class="form-group row">
                         <div class="col-sm-10">
@@ -102,11 +116,12 @@
                     </div>
                 </form>
             </div>
-            <form method="POST" action="{{ url_for('delete_doctor_page') }}">
             <div class="col">
+                <form method="POST" action="{{ url_for('delete_doctor') }}">
+
                 <h4 class="text-center">DELETE DOCTOR</h4>
                 <hr>
-                <form>
+
                     <div class="form-group row">
                         <label for="doctor_select" class="col-sm-2 col-form-label">TC: </label>
                         <div class="col-sm-10">
@@ -129,6 +144,44 @@
 
 {% block JS %}
 <script>
+$(document).ready(function() {
+
+
+$('#city_select_add').change(function () {
+
+        var url = "/get_districts";
+        var city_name = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city_name':city_name
+            },
+            success: function (data) {
+                $('#district_select_add').html(data);
+            }
+        });
+    });
+
+$('#district_select_add').change(function () {
+
+        var url = "/get_hospitals";
+        var city_name = $('#city_select_add').val();
+        var district_name = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city_name':city_name,
+                'district_name':district_name
+            },
+            success: function (data) {
+                $('#hospital_select_add').html(data);
+            }
+        });
+    });
+
+});
 
 </script>
 {% endblock %}

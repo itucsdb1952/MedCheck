@@ -1,6 +1,7 @@
 import psycopg2 as dbapi2
 import sys
 from settings import db_url
+from views import helpers
 
 
 # CRUD
@@ -73,8 +74,11 @@ class Place:
         except (Exception, dbapi2.Error) as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
         else:
-            place = Place(city=record[1], district=record[2], id=record[0])  # record = (id,city,district)
-            return place
+            if record is None:
+                return None
+            else:
+                place = Place(city=record[1], district=record[2], id=record[0])  # record = (id,city,district)
+                return place
 
     def __get_id(self) -> int:
         """
@@ -201,7 +205,7 @@ class Hospital:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    address_statement = "SELECT id,name,address,rate,capacity,handicapped,park FROM hospital "
+                    address_statement = "SELECT id,name,address,rate,capacity,handicapped,park FROM hospital"
                     if self.name and self.address:
                         address_statement += f"WHERE (name = '{self.name}' AND address = '{self.address.id}') "
                     elif self.name:
@@ -238,10 +242,13 @@ class Hospital:
         except (Exception, dbapi2.Error) as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
         else:
-            id_, name, address, rate, capacity, handicapped, park = record
-            hospital = Hospital(name=name, address=Place(id=address).get_object(), rate=rate, capacity=capacity,
-                                handicapped=handicapped, park=park, id=id_)  # record = (id,city,district)
-            return hospital
+            if record is None:
+                return None
+            else:
+                id_, name, address, rate, capacity, handicapped, park = record
+                hospital = Hospital(name=name, address=Place(id=address).get_object(), rate=rate, capacity=capacity,
+                                    handicapped=handicapped, park=park, id=id_)  # record = (id,city,district)
+                return hospital
 
     def __get_id(self) -> int:
         """
@@ -415,7 +422,7 @@ class Human:
                     cursor.execute(query)
                     records = cursor.fetchall()
         except (Exception, dbapi2.Error) as error:
-            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+            print(f"Hgs Error while connecting to PostgreSQL: {error}", file=sys.stderr)
         else:
             objects = list()
             for tc, password, authorize, name, surname, mail, address, age, height, weight in records:
@@ -433,17 +440,20 @@ class Human:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    query = f"SELECT tc, password, authorize, name, surname, mail, address, age, height, weight FROM human WHERE tc = {self.tc} ;"
+                    query = f"SELECT tc, password, authorize, name, surname, mail, address, age, height, weight FROM human WHERE tc = '{self.tc}' ;"
                     cursor.execute(query)
                     record = cursor.fetchone()  # record = (id,city,district),
         except (Exception, dbapi2.Error) as error:
-            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+            print(f"Hg Error while connecting to PostgreSQL: {error}", file=sys.stderr)
         else:
-            tc, password, authorize, name, surname, mail, address, age, height, weight = record
-            human = Human(name=name, surname=surname, authorize=authorize, mail=mail,
-                          address=Place(id=address).get_object(), password=password, age=age, height=height,
-                          weight=weight, tc=tc)  # record = (id,city,district)
-            return human
+            if record is None:
+                return None
+            else:
+                tc, password, authorize, name, surname, mail, address, age, height, weight = record
+                human = Human(name=name, surname=surname, authorize=authorize, mail=mail,
+                              address=Place(id=address).get_object(), password=password, age=age, height=height,
+                              weight=weight, tc=tc)  # record = (id,city,district)
+                return human
 
     def save(self):
         """
@@ -576,7 +586,7 @@ class Doctor:
     def get_objects(self, limit: int = 100) -> list:
         """
         READ
-        It returns objects according to [workdays, hospital, workdays and hospital, expertise]
+        It returns objects according to [workdays, hospital, workdays and hospital, expertise, rate]
         :return: list of objects
         """
         try:
@@ -584,20 +594,24 @@ class Doctor:
                 with connection.cursor() as cursor:
                     query = "SELECT humantc,workdays,expertise,hospital,rate FROM doctor "
                     if self.workdays and self.hospital:
-                        query += f"WHERE (workdays = '{self.workdays}' AND hospital = '{self.hospital.id}') "
-                    elif self.workdays:
-                        query += f"WHERE (workdays = '{self.workdays}') "
+                        workdays_like = helpers.convert_to_like(self.workdays)
+                        query += f"WHERE (workdays LIKE '{workdays_like}' AND hospital = '{self.hospital.id}') "
                     elif self.hospital:
                         query += f"WHERE (hospital = '{self.hospital.id}') "
                     elif self.expertise:
                         query += f"WHERE (expertise = '{self.expertise}') "
+
+                    query += helpers.check_where_exist(query, self.workdays, "workdays LIKE '{}'", like=True)
+                    query += helpers.check_where_exist(query, self.rate, "rate >= '{}'")
+                    print(query)
+
                     if limit:
                         query += f"LIMIT {limit}"
 
                     cursor.execute(query)
                     records = cursor.fetchall()  # records = [(id,city,district),(id2,city2,district2)]
         except (Exception, dbapi2.Error) as error:
-            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+            print(f"Dgs Error while connecting to PostgreSQL: {error}", file=sys.stderr)
         else:
             objects = list()
             for humantc, workdays, expertise, hospital, rate in records:
@@ -615,16 +629,19 @@ class Doctor:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    query = f"SELECT humantc,workdays,expertise,hospital,rate FROM doctor WHERE humantc = {self.human.tc} ;"
+                    query = f"SELECT humantc,workdays,expertise,hospital,rate FROM doctor WHERE humantc = '{self.human.tc}' ;"
                     cursor.execute(query)
                     record = cursor.fetchone()  # record = (id,city,district),
         except (Exception, dbapi2.Error) as error:
-            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+            print(f"Dg Error while connecting to PostgreSQL: {error}", file=sys.stderr)
         else:
-            humantc, workdays, expertise, hospital, rate = record
-            doctor = Doctor(workdays=workdays, expertise=expertise, hospital=hospital, rate=rate,
-                            human=humantc.tc)  # record = (id,city,district)
-            return doctor
+            if record is None:
+                return None
+            else:
+                humantc, workdays, expertise, hospital, rate = record
+                doctor = Doctor(workdays=workdays, expertise=expertise, hospital=hospital, rate=rate,
+                                human=humantc.tc)  # record = (id,city,district)
+                return doctor
 
     def save(self):
         """
