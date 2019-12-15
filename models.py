@@ -39,16 +39,14 @@ class Place:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
                     if distinct_city:
-                        address_statement = "SELECT DISTINCT ON (city) ID, city, district FROM place "
+                        query = "SELECT DISTINCT ON (city) ID, city, district FROM place "
                     else:
-                        address_statement = "SELECT ID, city, district FROM place "
-                    if self.city and self.district:
-                        address_statement += f"WHERE (city = '{self.city}' AND district = '{self.district}');"
-                    elif self.city:
-                        address_statement += f"WHERE (city = '{self.city}');"
-                    elif self.district:
-                        address_statement += f"WHERE (district = '{self.district}');"
-                    cursor.execute(address_statement)
+                        query = "SELECT ID, city, district FROM place "
+
+                    query += helpers.check_where_exist(query, self.city, "city = '{}'")
+                    query += helpers.check_where_exist(query, self.district, "district = '{}'")
+
+                    cursor.execute(query)
                     records = cursor.fetchall()  # records = [(id,city,district),(id2,city2,district2)]
         except (Exception, dbapi2.Error) as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -199,23 +197,26 @@ class Hospital:
     def get_objects(self, limit: int = 100) -> list:
         """
         READ
-        It returns objects according to [address, name, address and name]
+        It returns objects according to [address, name, handicapped, park, capacity, rate]
         :return: list of objects
         """
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    address_statement = "SELECT id,name,address,rate,capacity,handicapped,park FROM hospital"
-                    if self.name and self.address:
-                        address_statement += f"WHERE (name = '{self.name}' AND address = '{self.address.id}') "
-                    elif self.name:
-                        address_statement += f"WHERE (name = '{self.name}') "
-                    elif self.address:
-                        address_statement += f"WHERE (address = '{self.address.id}') "
-                    if limit:
-                        address_statement += f"LIMIT {limit}"
+                    query = "SELECT id,name,address,rate,capacity,handicapped,park FROM hospital"
+                    if self.address:
+                        query += f"WHERE (address = '{self.address.id}') "
 
-                    cursor.execute(address_statement)
+                    query += helpers.check_where_exist(query, self.name, "name = '{}'")
+                    query += helpers.check_where_exist(query, self.handicapped, "handicapped = '{}'")
+                    query += helpers.check_where_exist(query, self.park, "park = '{}'")
+                    query += helpers.check_where_exist(query, self.capacity, "capacity >= '{}'")
+                    query += helpers.check_where_exist(query, self.rate, "rate >= '{}'")
+
+                    if limit:
+                        query += f"LIMIT {limit}"
+
+                    cursor.execute(query)
                     records = cursor.fetchall()  # records = [(id,city,district),(id2,city2,district2)]
         except (Exception, dbapi2.Error) as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -409,16 +410,14 @@ class Human:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
                     query = "SELECT tc, password, authorize, name, surname, mail, address, age, height, weight FROM human "
-                    if self.name and self.surname:
-                        query += f"WHERE (name = '{self.name}' AND surname = '{self.surname}');"
-                    elif self.name:
-                        query += f"WHERE (name = '{self.name}');"
-                    elif self.surname:
-                        query += f"WHERE (surname = '{self.surname}');"
-                    elif self.authorize:
-                        query += f"WHERE (authorize = '{self.authorize}');"
-                    elif self.address:
-                        query += f"WHERE (address = '{self.address}');"
+                    if self.address:
+                        query += f"WHERE (address = '{self.address.id}');"
+
+                    query += helpers.check_where_exist(query, self.name, "name LIKE '%{}%'")
+                    query += helpers.check_where_exist(query, self.surname, "surname LIKE '%{}%'")
+                    query += helpers.check_where_exist(query, self.mail, "mail LIKE '%{}%'")
+                    query += helpers.check_where_exist(query, self.authorize, "authorize = '{}'")
+
                     cursor.execute(query)
                     records = cursor.fetchall()
         except (Exception, dbapi2.Error) as error:
@@ -593,17 +592,12 @@ class Doctor:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
                     query = "SELECT humantc,workdays,expertise,hospital,rate FROM doctor "
-                    if self.workdays and self.hospital:
-                        workdays_like = helpers.convert_to_like(self.workdays)
-                        query += f"WHERE (workdays LIKE '{workdays_like}' AND hospital = '{self.hospital.id}') "
-                    elif self.hospital:
-                        query += f"WHERE (hospital = '{self.hospital.id}') "
-                    elif self.expertise:
-                        query += f"WHERE (expertise = '{self.expertise}') "
+                    if self.hospital:
+                        query += f"WHERE (hospital = '{self.hospital.id}');"
 
+                    query += helpers.check_where_exist(query, self.expertise, "expertise = '{}'")
                     query += helpers.check_where_exist(query, self.workdays, "workdays LIKE '{}'", like=True)
                     query += helpers.check_where_exist(query, self.rate, "rate >= '{}'")
-                    print(query)
 
                     if limit:
                         query += f"LIMIT {limit}"

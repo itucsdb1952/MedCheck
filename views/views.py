@@ -1,61 +1,44 @@
-import psycopg2 as dbapi2
-import sys
-from settings import db_url
+from flask import render_template
+
+from models import Place
+from views import functions
 
 
-def get_hospitals_with_place(limit: int = 100, city: str = None, district: str = None) -> list:
-    """
-
-    :param limit:
-    :param city:
-    :param district:
-    :return:
-    """
-
+def admin_page():
     try:
-        with dbapi2.connect(db_url) as connection:
-            with connection.cursor() as cursor:
-                statement = "SELECT hospital.name, place.city, place.district, hospital.rate, hospital.handicapped, hospital.park " \
-                            "FROM hospital, place "
-                if city:
-                    if district:  # city and district
-                        statement += "WHERE hospital.address = place.id AND place.city = '{}' " \
-                                     "AND place.district = '{}' ".format(city, district)
-                    else:  # just city
-                        statement += "WHERE hospital.address = place.id AND place.city = '{}' ".format(city)
+        hospitals = functions.get_hospitals_with_place()
 
-                elif district:  # just district
-                    statement += "WHERE hospital.address = place.id AND place.district = '{}' ".format(district)
-                else:  # fetch all hospitals
-                    statement += "WHERE hospital.address = place.id "
-
-                statement += "ORDER BY name LIMIT {}".format(limit)
-
-                cursor.execute(statement)
-                record = cursor.fetchall()
-                return record
-
-    except (Exception, dbapi2.Error) as error:
-        print("Error while connecting to PostgreSQL: {}".format(error), file=sys.stderr)
-
-    finally:
-        # closing database connection.
-        if connection:
-            cursor.close()
-            connection.close()
+    except Exception as e:
+        return e
+    else:
+        return render_template('admin.html', hospitals=hospitals)
 
 
-def log_in(tc, password):
-    try:
-        with dbapi2.connect(db_url) as connection:
-            with connection.cursor() as cursor:
-                statement = "select password from human where tc='{}';".format(tc)
-                cursor.execute(statement)
-                result = cursor.fetchone()[0]
-                if result == password:
-                    return "congrats"
-                return "sth is wrong"
-    finally:
-        if connection:
-            cursor.close()
-            connection.close()
+def hospitals_page():
+    places = Place().get_objects(distinct_city=True)
+    cities = [place.city for place in places]
+
+    return render_template('admin_hospitals.html', cities=cities)
+
+
+def doctors_page():
+    places = Place().get_objects(distinct_city=True)
+    cities = [place.city for place in places]
+
+    return render_template('admin_doctors.html', cities=cities)
+
+
+def hospital_patient_page():
+    return render_template('hospital_patient.html')
+
+
+def login_page():
+    return render_template("login.html")
+
+
+def register_page():
+    return render_template("Register.html")
+
+
+def how_to_use_page():
+    return render_template("How to Use.html")

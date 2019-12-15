@@ -1,172 +1,36 @@
-from flask import Flask, render_template, redirect, url_for
-from flask import request
-
-from views import views, helpers
-from models import Place, Hospital, Human, Doctor
-
-app = Flask(__name__)
+from flask import Flask
+from views import views, functions, ajax
 
 
-# app.secret_key = b'\xe7x\xd2\xd3\x028\xb1\xf15\xb1?\xc1\x8d\xa9\xdaz'
+def create_app():
+    app = Flask(__name__)
+    app.secret_key = b'\xe7x\xd2\xd3\x028\xb1\xf15\xb1?\xc1\x8d\xa9\xdaz'
 
-@app.route("/")
-def admin_page():
-    try:
-        hospitals = views.get_hospitals_with_place()
+    # VIEWS
+    app.add_url_rule("/", view_func=views.admin_page)
+    app.add_url_rule("/hospitals", view_func=views.hospitals_page)
+    app.add_url_rule("/hospital_patient", view_func=views.hospital_patient_page)
+    app.add_url_rule("/login_page", view_func=views.login_page)
+    app.add_url_rule("/register", view_func=views.register_page)
+    app.add_url_rule("/doctors", view_func=views.doctors_page)
+    app.add_url_rule("/how_to_use", view_func=views.how_to_use_page)
 
-    except Exception as e:
-        return e
-    else:
-        url = url_for('admin_page')
+    # FUNCTIONS
+    app.add_url_rule("/add_hospital", view_func=functions.add_hospital, methods=['POST'])
+    app.add_url_rule("/del_hospital", view_func=functions.del_hospital, methods=['POST'])
+    app.add_url_rule("/add_doctor", view_func=functions.add_doctor, methods=['POST'])
+    app.add_url_rule("/delete_doctor", view_func=functions.delete_doctor, methods=['POST'])
+    app.add_url_rule("/add_person", view_func=functions.add_person, methods=['POST'])
+    app.add_url_rule("/login", view_func=functions.login, methods=['POST'])
 
-        return render_template('admin.html', hospitals=hospitals, url=url)
+    # AJAX
+    app.add_url_rule("/get_districts", view_func=ajax.get_districts_ajax, methods=['POST'])
+    app.add_url_rule("/get_hospitals", view_func=ajax.get_hospitals_ajax, methods=['POST'])
 
-
-@app.route("/hospitals")
-def hospitals_page():
-    places = Place().get_objects(distinct_city=True)
-    cities = [place.city for place in places]
-
-    return render_template('admin_hospitals.html', cities=cities)
-
-
-@app.route("/add_hospital", methods=['POST'])
-def add_hospital_page():
-    hospital_name = request.form.get('hospital_name')
-    city = request.form.get('city_select')
-    district = request.form.get('district_select')
-    park = helpers.checkbox_to_bool(request.form.get('park'))
-    handicapped = helpers.checkbox_to_bool(request.form.get('handicapped'))
-
-    p = Place(city, district).get_objects()[0]
-    Hospital(hospital_name, p.id, park=park, handicapped=handicapped).save()
-
-    return redirect('/')
-
-
-@app.route("/del_hospital", methods=['POST'])
-def del_hospital():
-    hospital_id = request.form.get('hospital_select_del')
-    Hospital(id=hospital_id).delete()
-    return redirect('/')
-
-
-@app.route("/doctors")
-def doctors_page():
-    places = Place().get_objects(distinct_city=True)
-    cities = [place.city for place in places]
-
-    return render_template('admin_doctors.html', cities=cities)
-
-
-@app.route("/hospital_patient")
-def hospital_patient_page():
-    return render_template('hospital_patient.html')
-
-
-@app.route("/add_doctor", methods=['POST'])
-def add_doctor():
-    print("belki buraya gelmistir")
-    name = request.form.get("doctor_name")
-    surname = request.form.get("doctor_surname")
-    tc = request.form.get("doctor_tc")
-    password = request.form.get("doctor_password")
-    email = request.form.get("doctor_email")
-    city = request.form.get("city_select_add")
-    district = request.form.get("district_select_add")
-    address = Place(city=city, district=district).get_objects()[0]
-    workdays = str()
-    day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    for i, day in enumerate(day_list):
-        if request.form.get(day) == "on":
-            workdays += str(i + 1)
-    print("workdays:", workdays)
-    expertise = request.form.get("doctor_expertise")
-    hospital_id = request.form.get("hospital_select_add")
-    hospital = Hospital(id=hospital_id).get_object()
-    print("doctor page info", name, surname, tc)
-
-    human = Human(tc=tc).get_object()
-    if human is None:
-        human = Human(tc=tc, password=password, authorize='doctor', name=name, surname=surname, mail=email,
-                      address=address)
-        human.save()
-
-    doctor = Doctor(human=human).get_object()
-    if doctor is None:
-        doctor = Doctor(human=human, workdays=workdays, expertise=expertise, hospital=hospital)
-        doctor.save()
-    #  else doctor is already created
-
-    return redirect(url_for('doctors_page'))
-
-
-@app.route("/delete_doctor", methods=['POST'])
-def delete_doctor():
-    tc = request.form.get("doctor_tc")
-    human_for_check = Human(tc=tc).get_object()
-    if human_for_check is not None:
-        Doctor(human=human_for_check).delete()
-    return redirect(url_for('doctors_page'))
-
-
-@app.route("/log_in")
-def log_in_page():
-    return render_template("Log_in.html")
-
-
-@app.route("/log_in_check", methods=['POST'])
-def log_in_check():
-    tc = request.form.get("tc")
-    password = request.form.get("password")
-    response_for_log_in = views.log_in(tc, password)
-    return response_for_log_in
-
-
-@app.route("/register")
-def register_page():
-    return render_template("Register.html")
-
-
-@app.route("/add_person", methods=['POST'])
-def add_person():
-    name = request.form.get("name")
-    surname = request.form.get("surname")
-    tc = request.form.get("tc")
-    email = request.form.get("email")
-    address = request.form.get("address")
-    password = request.form.get("password")
-    authorization = request.form.get("authorization")
-    human_for_check = Human(tc=tc).get_object()
-    if human_for_check is None:
-        human = Human(tc=tc, password=password, authorize=authorization, name=name, surname=surname, mail=email,
-                      address=address)
-        human.save()
-
-    return redirect(url_for('log_in_page'))
-
-
-@app.route("/how_to_use")
-def how_to_use_page():
-    return render_template("How to Use.html")
-
-
-@app.route("/get_districts", methods=['POST'])
-def get_districts_ajax():
-    places = Place(request.form.get('city_name')).get_objects()
-    response = " ".join(['<option value="{}">{}</option>'.format(place.district, place.district) for place in places])
-    return response
-
-
-@app.route("/get_hospitals", methods=['POST'])
-def get_hospitals_ajax():
-    place = Place(request.form.get('city_name'), request.form.get('district_name')).get_objects()[0]
-    hospitals = Hospital(address=place).get_objects()
-    response = " ".join(
-        ['<option value="{}">{}</option>'.format(hospital.id, hospital.name) for hospital in hospitals])
-    return response
+    return app
 
 
 if __name__ == "__main__":
+    app = create_app()
     app.debug = True
     app.run()
