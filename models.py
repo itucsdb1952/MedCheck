@@ -66,7 +66,7 @@ class Place:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    address_statement = "SELECT ID, city, district FROM place WHERE id = {} ;".format(self.id)
+                    address_statement = "SELECT ID, city, district FROM place WHERE id = {}  ".format(self.id)
                     cursor.execute(address_statement)
                     record = cursor.fetchone()  # record = (id,city,district),
         except (Exception, dbapi2.Error) as error:
@@ -88,7 +88,7 @@ class Place:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    address_statement = "SELECT ID FROM place WHERE (city = '{}' AND district = '{}');".format(
+                    address_statement = "SELECT ID FROM place WHERE (city = '{}' AND district = '{}') ".format(
                         self.city,
                         self.district)
                     cursor.execute(address_statement)
@@ -107,7 +107,7 @@ class Place:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    insert_statement = "INSERT INTO place(city, district) VALUES('{}','{}');".format(self.city,
+                    insert_statement = "INSERT INTO place(city, district) VALUES('{}','{}') ".format(self.city,
                                                                                                      self.district)
                     cursor.execute(insert_statement)
 
@@ -124,7 +124,7 @@ class Place:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    delete_statement = "DELETE FROM place WHERE id = '{}';".format(self.id)
+                    delete_statement = "DELETE FROM place WHERE id = '{}' ".format(self.id)
                     cursor.execute(delete_statement)
 
         except dbapi2.Error as error:
@@ -144,7 +144,7 @@ class Place:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    update_statement = "UPDATE place SET city='{}', district='{}' WHERE (id='{}');" \
+                    update_statement = "UPDATE place SET city='{}', district='{}' WHERE (id='{}') " \
                         .format(self.city, self.district, self.id)
                     cursor.execute(update_statement)
 
@@ -205,7 +205,7 @@ class Hospital:
                 with connection.cursor() as cursor:
                     query = "SELECT id,name,address,rate,capacity,handicapped,park FROM hospital"
                     if self.address:
-                        query += f"WHERE (address = '{self.address.id}') "
+                        query += f" WHERE (address = '{self.address.id}') "
 
                     query += helpers.check_where_exist(query, self.name, "name = '{}'")
                     query += helpers.check_where_exist(query, self.handicapped, "handicapped = '{}'")
@@ -237,7 +237,7 @@ class Hospital:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    query = f"SELECT id,name,address,rate,capacity,handicapped,park FROM hospital WHERE id = {self.id} ;"
+                    query = f"SELECT id,name,address,rate,capacity,handicapped,park FROM hospital WHERE id = {self.id}  "
                     cursor.execute(query)
                     record = cursor.fetchone()  # record = (id,city,district),
         except (Exception, dbapi2.Error) as error:
@@ -261,7 +261,7 @@ class Hospital:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    address_statement = f"SELECT ID FROM hospital WHERE (name = '{self.name}' AND address = '{self.address.id}'); "
+                    address_statement = f"SELECT ID FROM hospital WHERE (name = '{self.name}' AND address = '{self.address.id}')  "
                     cursor.execute(address_statement)
                     record = cursor.fetchone()
         except (Exception, dbapi2.Error) as error:
@@ -280,7 +280,7 @@ class Hospital:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
                     insert_statement = "INSERT INTO hospital(name, address, rate, capacity, handicapped, park)" \
-                                       f" VALUES('{self.name}','{self.address.id}','{self.rate}','{self.capacity}','{self.handicapped}','{self.park}');"
+                                       f" VALUES('{self.name}','{self.address.id}','{self.rate}','{self.capacity}','{self.handicapped}','{self.park}') "
                     cursor.execute(insert_statement)
 
         except (Exception, dbapi2.Error) as error:
@@ -297,7 +297,7 @@ class Hospital:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    delete_statement = f"DELETE FROM hospital WHERE id = '{self.id}';"
+                    delete_statement = f"DELETE FROM hospital WHERE id = '{self.id}'"
                     cursor.execute(delete_statement)
 
         except dbapi2.Error as error:
@@ -328,7 +328,7 @@ class Hospital:
                 with connection.cursor() as cursor:
                     update_statement = f"UPDATE hospital SET name='{self.name}', address='{self.address.id}'," \
                                        f" rate='{self.rate}', capacity='{self.capacity}', " \
-                                       f"handicapped='{self.handicapped}', park='{self.park}' WHERE (id='{self.id}');"
+                                       f"handicapped='{self.handicapped}', park='{self.park}' WHERE (id='{self.id}') "
 
                     cursor.execute(update_statement)
 
@@ -411,7 +411,7 @@ class Human:
                 with connection.cursor() as cursor:
                     query = "SELECT tc, password, authorize, name, surname, mail, address, age, height, weight FROM human "
                     if self.address:
-                        query += f"WHERE (address = '{self.address.id}');"
+                        query += f" WHERE (address = '{self.address.id}')"
 
                     query += helpers.check_where_exist(query, self.name, "name LIKE '%{}%'")
                     query += helpers.check_where_exist(query, self.surname, "surname LIKE '%{}%'")
@@ -439,7 +439,7 @@ class Human:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    query = f"SELECT tc, password, authorize, name, surname, mail, address, age, height, weight FROM human WHERE tc = '{self.tc}' ;"
+                    query = f"SELECT tc, password, authorize, name, surname, mail, address, age, height, weight FROM human WHERE tc = '{self.tc}' "
                     cursor.execute(query)
                     record = cursor.fetchone()  # record = (id,city,district),
         except (Exception, dbapi2.Error) as error:
@@ -464,7 +464,7 @@ class Human:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
                     query = "INSERT INTO human(tc, password, authorize, name, surname, mail, address, age, height, weight)" \
-                            " VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}');".format(self.tc,
+                            " VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}') ".format(self.tc,
                                                                                                  self.password,
                                                                                                  self.authorize,
                                                                                                  self.name,
@@ -487,7 +487,7 @@ class Human:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    delete_statement = f"DELETE FROM human WHERE tc = '{self.tc}';"
+                    delete_statement = f"DELETE FROM human WHERE tc = '{self.tc}' "
                     cursor.execute(delete_statement)
 
         except dbapi2.Error as error:
@@ -526,7 +526,7 @@ class Human:
                 with connection.cursor() as cursor:
                     update_statement = "UPDATE human SET tc='{}', password='{}', authorize='{}', name='{}'," \
                                        " surname='{}', mail='{}', address='{}', age='{}', weight='{}', height='{}'" \
-                                       " WHERE (tc='{}');".format(tc,
+                                       " WHERE (tc='{}') ".format(tc,
                                                                   self.password,
                                                                   self.authorize,
                                                                   self.name,
@@ -593,7 +593,7 @@ class Doctor:
                 with connection.cursor() as cursor:
                     query = "SELECT humantc,workdays,expertise,hospital,rate FROM doctor "
                     if self.hospital:
-                        query += f"WHERE (hospital = '{self.hospital.id}');"
+                        query += f" WHERE (hospital = '{self.hospital.id}') "
 
                     query += helpers.check_where_exist(query, self.expertise, "expertise = '{}'")
                     query += helpers.check_where_exist(query, self.workdays, "workdays LIKE '{}'", like=True)
@@ -623,7 +623,7 @@ class Doctor:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    query = f"SELECT humantc,workdays,expertise,hospital,rate FROM doctor WHERE humantc = '{self.human.tc}' ;"
+                    query = f"SELECT humantc,workdays,expertise,hospital,rate FROM doctor WHERE humantc = '{self.human.tc}'  "
                     cursor.execute(query)
                     record = cursor.fetchone()  # record = (id,city,district),
         except (Exception, dbapi2.Error) as error:
@@ -648,7 +648,7 @@ class Doctor:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
                     query = "INSERT INTO doctor(humantc,workdays,expertise,hospital,rate)" \
-                            f" VALUES('{self.human.tc}','{self.workdays}','{self.expertise}','{self.hospital.id}','{self.rate}');"
+                            f" VALUES('{self.human.tc}','{self.workdays}','{self.expertise}','{self.hospital.id}','{self.rate}') "
                     cursor.execute(query)
 
         except (Exception, dbapi2.Error) as error:
@@ -662,7 +662,7 @@ class Doctor:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    delete_statement = f"DELETE FROM doctor WHERE humantc = '{self.human.tc}';"
+                    delete_statement = f"DELETE FROM doctor WHERE humantc = '{self.human.tc}' "
                     cursor.execute(delete_statement)
 
         except dbapi2.Error as error:
@@ -695,7 +695,7 @@ class Doctor:
                 with connection.cursor() as cursor:
                     update_statement = f"UPDATE doctor SET humantc='{self.human.tc}', hospital='{self.hospital.id}'," \
                                        f" rate='{self.rate}', workdays='{self.workdays}', " \
-                                       f"expertise='{self.expertise}' WHERE (humantc='{tc}');"
+                                       f"expertise='{self.expertise}' WHERE (humantc='{tc}') "
 
                     cursor.execute(update_statement)
 

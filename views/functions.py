@@ -1,12 +1,14 @@
-from flask import Flask, render_template, redirect, url_for, session
+from flask import redirect, url_for, session, request
 from flask import request
 
-from views import helpers
+from views import helpers, views
 from models import Place, Hospital, Human, Doctor
 
 import psycopg2 as dbapi2
 import sys
 from settings import db_url
+
+import functools
 
 
 def get_hospitals_with_place(limit: int = 100, city: str = None, district: str = None) -> list:
@@ -51,20 +53,23 @@ def get_hospitals_with_place(limit: int = 100, city: str = None, district: str =
             connection.close()
 
 
-def login(tc, password):
+def login():
+    tc = request.form.get('tc')
+    password = request.form.get('password')
     try:
         with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
-                query = "select password from human where tc='{}';".format(tc)
+                query = "select tc, password, authorize from human where tc='{}' ".format(tc)
                 cursor.execute(query)
-                result = cursor.fetchone()[0]
-                if result == password:
-                    return "congrats"
-                return "sth is wrong"
-    finally:
-        if connection:
-            cursor.close()
-            connection.close()
+                record = cursor.fetchone()
+                if record:
+                    tc_, password_, authorize_ = record
+                    if password_ == password:
+                        session['user_tc'] = tc_
+                        session['user_auth'] = authorize_
+                    return redirect('/')
+    except (Exception, dbapi2.Error) as error:
+        print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
 
 
 def add_hospital():
@@ -143,3 +148,24 @@ def add_person():
         human.save()
 
     return redirect(url_for('login_page'))
+
+
+def let_to(auths: list):
+    def decorator_let_to(view_func):
+        @functools.wraps(view_func)
+        def wrapper_view_func(*args, **kwargs):
+            # ------------------------------------------------------
+            if 'user_auth' in session:
+                user_auth = session['user_auth']
+                if user_auth in auths:
+                    returned_value = view_func(*args, **kwargs)
+                else:
+                    return redirect(url_for(views.forbidden_403_page.__name__))
+            else:
+                return redirect(url_for(views.login_page.__name__))
+            # ------------------------------------------------------
+            return returned_value
+
+        return wrapper_view_func
+
+    return decorator_let_to

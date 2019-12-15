@@ -43,6 +43,12 @@ def initialize(url: str) -> None:
                     if len(statement) > 5:
                         cursor.execute(statement)
                 print("Hospitals...", file=sys.stderr)
+
+                add_user_statements = read_sql_from_file('users.sql')
+                for statement in add_user_statements:
+                    if len(statement) > 5:
+                        cursor.execute(statement)
+                print("Users...", file=sys.stderr)
     except (Exception, dbapi2.Error) as error:
         print("Error while connecting to PostgreSQL: {}".format(error), file=sys.stderr)
 
