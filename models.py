@@ -207,7 +207,7 @@ class Hospital:
                     if self.address:
                         query += f" WHERE (address = '{self.address.id}') "
 
-                    query += helpers.check_where_exist(query, self.name, "name = '{}'")
+                    query += helpers.check_where_exist(query, self.name, "name LIKE '%{}%'")
                     query += helpers.check_where_exist(query, self.handicapped, "handicapped = '{}'")
                     query += helpers.check_where_exist(query, self.park, "park = '{}'")
                     query += helpers.check_where_exist(query, self.capacity, "capacity >= '{}'")
