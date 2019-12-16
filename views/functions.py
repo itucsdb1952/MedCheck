@@ -1,14 +1,25 @@
 from flask import redirect, url_for, session, request
 from flask import request
 
+from werkzeug.utils import secure_filename
+
 from views import helpers, views
 from models import Place, Hospital, Human, Doctor
 
 import psycopg2 as dbapi2
-import sys
+import sys, os
 from settings import db_url
+import csv
 
 import functools
+
+ALLOWED_EXTENSIONS = ['csv']
+UPLOAD_FOLDER = 'static/uploads'
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
 def get_hospitals_with_place(limit: int = 100, city: str = None, district: str = None) -> list:
@@ -90,7 +101,30 @@ def update_place(place_id):
     city = request.form.get('modal_city')
     district = request.form.get('modal_district')
 
-    Place(id=place_id).update(city,district)
+    Place(id=place_id).update(city, district)
+    return redirect(url_for(views.admin_places_page.__name__))
+
+
+def upload_place():
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+    file = request.files['place_file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(file_path)
+
+        with open(file_path) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            line_count = 0
+            for row in csv_reader:
+                if line_count == 0:
+                    pass
+                    line_count += 1
+                else:
+                    city, district = row
+                    Place(city, district).save()
+                    line_count += 1
     return redirect(url_for(views.admin_places_page.__name__))
 
 

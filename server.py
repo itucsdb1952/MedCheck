@@ -19,6 +19,7 @@ app.add_url_rule("/403", view_func=views.forbidden_403_page)
 app.add_url_rule("/add_place", view_func=functions.add_place, methods=['POST'])
 app.add_url_rule("/del_place/<int:place_id>", view_func=functions.del_place, methods=['GET'])
 app.add_url_rule("/update_place/<int:place_id>", view_func=functions.update_place, methods=['POST'])
+app.add_url_rule("/upload_place", view_func=functions.upload_place, methods=['POST'])
 
 app.add_url_rule("/add_hospital", view_func=functions.add_hospital, methods=['POST'])
 app.add_url_rule("/del_hospital/<int:hospital_id>", view_func=functions.del_hospital, methods=['GET'])

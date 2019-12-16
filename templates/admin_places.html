@@ -59,6 +59,22 @@
                 </form>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <form method="POST" action="{{ url_for('upload_place') }}" enctype="multipart/form-data">
+                    <div class="form-group row">
+                        <div class="custom-file col-sm-5">
+                            <input type="file" class="custom-file-input" id="place_file" name="place_file">
+                            <label class="custom-file-label" for="place_file">Choose file</label>
+                      </div>
+                    <div class="col-sm-1">
+                       <button id="file_button" class="btn btn-primary" type="submit">Upload</button>
+                    </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="update_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="update_modal_label" aria-hidden="true">
@@ -105,6 +121,12 @@
 
 {% block JS %}
 <script>
+
+// Add the following code if you want the name of the file appear on select
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
 
 var update_modal = function (place_id) {
     let form_action = $('#modal_update_form').attr('action');
