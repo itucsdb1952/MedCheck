@@ -83,10 +83,9 @@ def add_hospital():
     Hospital(hospital_name, p.id, park=park, handicapped=handicapped).save()
 
 
-def del_hospital():
-    hospital_id = request.form.get('hospital_select_del')
+def del_hospital(hospital_id):
     Hospital(id=hospital_id).delete()
-    return redirect('/')
+    return redirect(url_for(views.admin_hospitals_page.__name__))
 
 
 def add_doctor():
@@ -148,6 +147,7 @@ def add_person():
         human.save()
 
     return redirect(url_for('login_page'))
+
 
 
 def let_to(auths: list):

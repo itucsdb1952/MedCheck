@@ -1,5 +1,5 @@
 def checkbox_to_bool(checkbox_value: str) -> bool:
-    if checkbox_value == 'on':
+    if checkbox_value == 'on' or checkbox_value == 'true':
         return True
     else:
         return False
@@ -27,7 +27,7 @@ def check_where_exist(query: str, column: object, condition: str, like: bool = F
         if "WHERE" in query:
             new_query = f" AND ({condition}) "
         else:
-            new_query = f"WHERE ({condition}) "
+            new_query = f" WHERE ({condition}) "
         return new_query
     return ""
 

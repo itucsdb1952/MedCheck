@@ -18,7 +18,7 @@ def create_app():
 
     # FUNCTIONS
     app.add_url_rule("/add_hospital", view_func=functions.add_hospital, methods=['POST'])
-    app.add_url_rule("/del_hospital", view_func=functions.del_hospital, methods=['POST'])
+    app.add_url_rule("/del_hospital/<int:hospital_id>", view_func=functions.del_hospital, methods=['GET'])
     app.add_url_rule("/add_doctor", view_func=functions.add_doctor, methods=['POST'])
     app.add_url_rule("/delete_doctor", view_func=functions.delete_doctor, methods=['POST'])
     app.add_url_rule("/add_person", view_func=functions.add_person, methods=['POST'])
@@ -27,6 +27,7 @@ def create_app():
     # AJAX
     app.add_url_rule("/get_districts", view_func=ajax.get_districts_ajax, methods=['POST'])
     app.add_url_rule("/get_hospitals", view_func=ajax.get_hospitals_ajax, methods=['POST'])
+    app.add_url_rule("/filter_hospital", view_func=ajax.filter_hospital_ajax, methods=['POST'])
 
     return app
 

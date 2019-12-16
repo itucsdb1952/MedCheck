@@ -9,7 +9,7 @@ script:
 deploy:
     - provider: pages
       skip_cleanup: true
-      github_token: 53f862a5691be9005c891242c4ac5ef8438498a2
+      github_token: $GH_TOKEN
       local_dir: docs/_build
       on:
         branch: master
