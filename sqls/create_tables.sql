@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS Human
 );
 
 CREATE TABLE IF NOT EXISTS Doctor
-  (HumanTC CHAR(11) PRIMARY KEY REFERENCES Human(TC) ,
+  (HumanTC CHAR(11) PRIMARY KEY REFERENCES Human(TC) ON DELETE CASCADE ,
   Workdays varchar(255)    NOT NULL, -- 1:monday .. 7:sunday
   Expertise varchar(255)    NOT NULL,
   Hospital INTEGER REFERENCES Hospital(ID) NOT NULL,

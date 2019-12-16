@@ -115,30 +115,35 @@ def add_human():
     city = request.form.get("city_select_add")
     district = request.form.get("district_select_add")
     address = Place(city=city, district=district).get_objects()[0]
-    workdays = str()
-    day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    for i, day in enumerate(day_list):
-        if request.form.get(day) == "on":
-            workdays += str(i + 1)
-    print("workdays:", workdays)
-    expertise = request.form.get("doctor_expertise")
-    hospital_id = request.form.get("hospital_select_add")
-    hospital = Hospital(id=hospital_id).get_object()
-    print("doctor page info", name, surname, tc)
 
     human = Human(tc=tc).get_object()
     if human is None:
-        human = Human(tc=tc, password=password, authorize='doctor', name=name, surname=surname, mail=email,
+        human = Human(tc=tc, password=password, authorize=authorize, name=name, surname=surname, mail=email,
                       address=address)
         human.save()
 
-    doctor = Doctor(human=human).get_object()
-    if doctor is None:
-        doctor = Doctor(human=human, workdays=workdays, expertise=expertise, hospital=hospital)
-        doctor.save()
-    #  else doctor is already created
+    if authorize == 'doctor':
+        workdays = str()
+        day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        for i, day in enumerate(day_list):
+            if request.form.get(day) == "on":
+                workdays += str(i + 1)
+        expertise = request.form.get("doctor_expertise")
+        hospital_id = request.form.get("hospital_select_add")
+        hospital = Hospital(id=hospital_id).get_object()
+
+        doctor = Doctor(human=human).get_object()
+        if doctor is None:
+            doctor = Doctor(human=human, workdays=workdays, expertise=expertise, hospital=hospital)
+            doctor.save()
+        #  else doctor is already created
 
     return redirect(url_for('admin_humans_page'))
+
+
+def del_human(human_tc):
+    Human(tc=human_tc).delete()
+    return redirect(url_for(views.admin_humans_page.__name__))
 
 
 def delete_doctor():

@@ -38,7 +38,7 @@
                     <div class="form-group row">
                         <label for="doctor_email" class="col-sm-2 col-form-label">E-mail: </label>
                         <div class="col-sm-10">
-                            <input type="text" name="doctor_email" class="form-control" id="doctor_email" placeholder="Will be used to contact">
+                            <input type="email" name="doctor_email" class="form-control" id="doctor_email" placeholder="Will be used to contact">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -46,8 +46,8 @@
                         <div class="col-sm-10">
                             <select class="form-control" name="authorize_select" id="authorize_select">
                                 <option value="admin">Admin</option>
-                                <option value="doctor">Doctor</option>
-                                <option value="normal" selected>Normal</option>
+                                <option value="doctor" selected>Doctor</option>
+                                <option value="normal">Normal</option>
                             </select>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row doctor_div">
                         <label for="hospital_select_add" class="col-sm-2 col-form-label">Hospital: </label>
                         <div class="col-sm-10">
                             <select class="form-control" name="hospital_select_add" id="hospital_select_add">
@@ -77,7 +77,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row doctor_div">
                         <div class="col-sm-2">Workdays: </div>
                         <div class="col-sm-4">
                             <div class="form-check">
@@ -127,26 +127,136 @@
                 </form>
             </div>
             <div class="col">
-                <form method="POST" action="{{ url_for('delete_doctor') }}">
 
-                <h4 class="text-center">DELETE HUMAN</h4>
+                <h4 class="text-center">FILTER HUMAN</h4>
                 <hr>
 
+                    <form method="POST" id="filter_human_form" action_url="{{url_for('filter_human_ajax')}}">
                     <div class="form-group row">
-                        <label for="doctor_select" class="col-sm-2 col-form-label">TC: </label>
-                        <div class="col-sm-10">
-                            <input type="text" name="doctor_tc" class="form-control" id="doctor_name" placeholder="TC of the doctor">
+                        <label for="city_select_filter" class="col-sm-2 col-form-label">City: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="city_select_filter" id="city_select_filter">
+                                {% for city in cities %}
+                                     <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+
+                        </select>
+                        </div>
+
+                        <label for="district_select_filter" class="col-sm-2 col-form-label">District: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="district_select_filter" id="district_select_filter">
+                                 <option value="">Choose a District</option>
+                            </select>
                         </div>
                     </div>
+
+
+
                     <div class="form-group row">
-                        <div class="col-sm-10">
-                            <button type="submit" class="btn btn-primary">DELETE DOCTOR</button>
+                        <label for="human_name_filter" class="col-sm-2 col-form-label">Name:</label>
+                        <div class="col-sm-4">
+                            <input type="text" name="human_name_filter" class="form-control" id="human_name_filter" placeholder="Maria">
+                        </div>
+                        <label for="human_surname_filter" class="col-sm-2 col-form-label">Surname:</label>
+                        <div class="col-sm-4">
+                            <input type="text" name="human_surname_filter" class="form-control" id="human_surname_filter" >
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="human_mail_filter" class="col-sm-2 col-form-label">Email:</label>
+                        <div class="col-sm-4">
+                            <input type="email" name="human_mail_filter" class="form-control" id="human_mail_filter">
+                        </div>
+                        <label for="authorize_select_filter" class="col-sm-2 col-form-label">Authorize: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="authorize_select_filter" id="authorize_select_filter">
+                                <option value="admin">Admin</option>
+                                <option value="doctor" selected>Doctor</option>
+                                <option value="normal">Normal</option>
+                            </select>
+                        </div>
+                    </div>
+                        <div class="col-sm-10">
+                            <button type="button" id="filter_human_button" onclick="filter_humans();" class="btn btn-danger">Get humans</button>
+                        </div>
+
                 </form>
             </div>
 
         </div>
+
+                <div class="modal fade" id="update_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="update_modal_label" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+          <form method="POST" id="modal_update_form" action="{{ url_for('update_human', human_tc=0) }}">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="update_modal_label">UPDATE HUMAN</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="modal_human_name" class="col-sm-2 col-form-label">Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="modal_human_name" class="form-control" id="modal_human_name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="modal_city_select" class="col-sm-2 col-form-label">City: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="modal_city_select" id="modal_city_select">
+                                {% for city in cities %}
+                                     <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+
+                        </select>
+                        </div>
+
+                        <label for="modal_district_select" class="col-sm-2 col-form-label">District: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="modal_district_select" id="modal_district_select">
+                                 <option value="">Choose a City</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-2">Park: </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input class="form-check-input" name="modal_park" type="checkbox" id="modal_park">
+                                <label class="form-check-label" for="modal_park">
+                                    True
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">Handicapped: </div>
+                        <div class="col-sm-2">
+                            <div class="form-check">
+                                <input class="form-check-input" name="modal_handicapped" type="checkbox" id="modal_handicapped" checked>
+                                <label class="form-check-label" for="modal_handicapped">
+                                    True
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+            </div>
+          </form>
+          </div>
+        </div>
+
+
+        <div id="human-table"></div>
     </div>
 
 
@@ -154,6 +264,60 @@
 
 {% block JS %}
 <script>
+
+var update_modal = function (human_id) {
+    let form_action = $('#modal_update_form').attr('action');
+    form_action = form_action.slice(0, -1); // remove last character: 0
+    form_action = form_action.concat(human_id);
+    $('#modal_update_form').attr('action', form_action);
+    let tr_id = '#tr_'.concat(human_id);
+    let tr_elem = $(tr_id);
+
+    let human_name = tr_elem.find('td:eq(0)').text();
+    let human_city_district = tr_elem.find('td:eq(1)').text();
+    human_city_district = human_city_district.split('/');
+    let human_city = human_city_district[0];
+    let human_district = human_city_district[1];
+    let human_handicapped = tr_elem.find('td:eq(4)').text();
+    let human_park = tr_elem.find('td:eq(5)').text();
+
+
+    $('#modal_human_name').val(human_name);
+    $('#modal_city_select').val(human_city);
+    //$('#modal_district_select').val(human_district);
+    $('#modal_park').val(human_park);
+    $('#modal_handicapped').val(human_handicapped);
+};
+
+var filter_humans = function () {
+    let url = $('#filter_human_form').attr('action_url');
+    let city = $('#city_select_filter').val();
+    let district = $('#district_select_filter').val();
+    let name = $('#human_name_filter').val();
+    let surname = $('#human_surname_filter').val();
+    let mail = $('#human_mail_filter').val();
+    let authorize = $('#authorize_select_filter').val();
+
+
+    $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city':city,
+                'district':district,
+                'name':name,
+                'surname':surname,
+                'mail':mail,
+                'authorize':authorize,
+
+            },
+            success: function (data) {
+                $('#human-table').html(data);
+            }
+        });
+
+    };
+
 $(document).ready(function() {
 
 
@@ -193,7 +357,13 @@ $('#district_select_add').change(function () {
 
 $('#authorize_select').change(function () {
 
-        $(this)
+        let authorize = $(this).val();
+        if(authorize === 'doctor'){
+            $('.doctor_div').show();
+        }
+        else{
+            $('.doctor_div').hide();
+        }
     });
 
 

@@ -1,8 +1,6 @@
 from flask import Flask
 from views import views, functions, ajax
 
-
-
 app = Flask(__name__)
 app.secret_key = b'\xe7x\xd2\xd3\x028\xb1\xf15\xb1?\xc1\x8d\xa9\xdaz'
 
@@ -21,6 +19,8 @@ app.add_url_rule("/add_hospital", view_func=functions.add_hospital, methods=['PO
 app.add_url_rule("/del_hospital/<int:hospital_id>", view_func=functions.del_hospital, methods=['GET'])
 app.add_url_rule("/update_hospital/<int:hospital_id>", view_func=functions.update_hospital, methods=['POST'])
 app.add_url_rule("/add_human", view_func=functions.add_human, methods=['POST'])
+app.add_url_rule("/del_human/<string:human_tc>", view_func=functions.del_human, methods=['GET'])
+
 app.add_url_rule("/delete_doctor", view_func=functions.delete_doctor, methods=['POST'])
 app.add_url_rule("/add_person", view_func=functions.add_person, methods=['POST'])
 app.add_url_rule("/login", view_func=functions.login, methods=['POST'])
@@ -29,8 +29,7 @@ app.add_url_rule("/login", view_func=functions.login, methods=['POST'])
 app.add_url_rule("/get_districts", view_func=ajax.get_districts_ajax, methods=['POST'])
 app.add_url_rule("/get_hospitals", view_func=ajax.get_hospitals_ajax, methods=['POST'])
 app.add_url_rule("/filter_hospital", view_func=ajax.filter_hospital_ajax, methods=['POST'])
-
-
+app.add_url_rule("/filter_human", view_func=ajax.filter_human_ajax, methods=['POST'])
 
 if __name__ == "__main__":
     app.debug = True

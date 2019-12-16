@@ -1,0 +1,43 @@
+{% if humans %}
+<br>
+<hr>
+<h4 class="text-center">humanS</h4>
+
+<table class="table table-hover table-inverse">
+    <thead class="thead-inverse">
+    <tr>
+        <th>TC</th>
+        <th>Name Surname</th>
+        <th>Mail</th>
+        <th>Address</th>
+        <th>Authorize</th>
+        <th>Age</th>
+        <th>Width</th>
+        <th>Height</th>
+        <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for human in humans %}
+    <tr id="tr_{{ human.tc }}">
+        <td>{{ human.tc }}</td>
+        <td>{{ human.name }} {{ human.surname }}</td>
+        <td>{{ human.mail }}</td>
+        <td>{{ human.address.city }}/{{ human.address.district }}</td>
+        <td>{{ human.authorize }}</td>
+        <td>{{ human.age }}</td>
+        <td>{{ human.width }}</td>
+        <td>{{ human.height }}</td>
+        <td>
+            <a data-toggle="modal" data-target="#update_modal" onclick="update_modal({{ human.tc }});" href="#">
+                <i class="fa fa-edit"></i>
+            </a>
+            <a href="{{ url_for('del_human', human_tc = human.tc) }}"><i class="fa fa-trash-alt"></i></a>
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endif %}
+

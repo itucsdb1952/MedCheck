@@ -400,7 +400,7 @@ class Human:
         if 'height' in kwargs.keys():
             self.height = kwargs['height']
 
-    def get_objects(self) -> list:
+    def get_objects(self, limit: int = 100) -> list:
         """
         READ
         It returns objects according to name and surname, name, surname, address, authorize
@@ -417,6 +417,9 @@ class Human:
                     query += helpers.check_where_exist(query, self.surname, "surname LIKE '%{}%'")
                     query += helpers.check_where_exist(query, self.mail, "mail LIKE '%{}%'")
                     query += helpers.check_where_exist(query, self.authorize, "authorize = '{}'")
+
+                    if limit:
+                        query += f"LIMIT {limit}"
 
                     cursor.execute(query)
                     records = cursor.fetchall()
