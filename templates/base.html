@@ -31,6 +31,10 @@
         <a class="nav-link" href="{{ url_for('admin_page') }}">Home </a>
       </li>
 
+    <li class="nav-item {% if url_for('admin_places_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('admin_places_page') }}">Places </a>
+      </li>
+
       <li class="nav-item {% if url_for('admin_hospitals_page') == url_for(request.endpoint) %}active{% endif %}">
         <a class="nav-link" href="{{ url_for('admin_hospitals_page') }}">Hospitals </a>
       </li>

@@ -17,6 +17,11 @@ def admin_page():
 
 
 @let_to(['admin'])
+def admin_places_page():
+    return render_template('admin_places.html')
+
+
+@let_to(['admin'])
 def admin_hospitals_page():
     places = Place().get_objects(distinct_city=True)
     cities = [place.city for place in places]

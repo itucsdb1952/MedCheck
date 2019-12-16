@@ -72,6 +72,28 @@ def login():
         print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
 
 
+def add_place():
+    city = request.form.get('add_city')
+    district = request.form.get('add_district')
+    places = Place(city, district).get_objects()
+    if len(places) == 0:
+        Place(city, district).save()
+    return redirect(url_for(views.admin_places_page.__name__))
+
+
+def del_place(place_id):
+    Place(id=place_id).delete()
+    return redirect(url_for(views.admin_places_page.__name__))
+
+
+def update_place(place_id):
+    city = request.form.get('modal_city')
+    district = request.form.get('modal_district')
+
+    Place(id=place_id).update(city,district)
+    return redirect(url_for(views.admin_places_page.__name__))
+
+
 def add_hospital():
     hospital_name = request.form.get('hospital_name')
     city = request.form.get('city_select')
@@ -81,6 +103,7 @@ def add_hospital():
 
     p = Place(city, district).get_objects()[0]
     Hospital(hospital_name, p.id, park=park, handicapped=handicapped).save()
+    return redirect(url_for(views.admin_hospitals_page.__name__))
 
 
 def del_hospital(hospital_id):
@@ -138,7 +161,7 @@ def add_human():
             doctor.save()
         #  else doctor is already created
 
-    return redirect(url_for('admin_humans_page'))
+    return redirect(url_for(views.admin_humans_page.__name__))
 
 
 def del_human(human_tc):

@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}PLACES{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col">
+                <h4 class="text-center">ADD PLACE</h4>
+                <hr>
+                <form method="POST" action="{{ url_for('add_place') }}">
+                    <div class="form-group row">
+                        <label for="add_city" class="col-sm-2 col-form-label">City:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="add_city" class="form-control" id="add_city" placeholder="Adana">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add_district" class="col-sm-2 col-form-label">District:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="add_district" class="form-control" id="add_district" placeholder="Merkez">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <button type="submit" id="hebe" class="btn btn-primary">Add Place</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col">
+                <h4 class="text-center">FILTER PLACES</h4>
+                <hr>
+                <form method="POST" id="filter_place_form" action_url="{{url_for('filter_place_ajax')}}">
+
+                    <div class="form-group row">
+                        <label for="city_filter" class="col-sm-2 col-form-label">City:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="city_filter" class="form-control" id="city_filter" placeholder="ADANA">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="district_filter" class="col-sm-2 col-form-label">District:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="district_filter" class="form-control" id="district_filter" placeholder="MERKEZ">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <button type="button" id="filter_place_button" onclick="filter_places();" class="btn btn-danger">Get places</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="update_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="update_modal_label" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+          <form method="POST" id="modal_update_form" action="{{ url_for('update_place', place_id=0) }}">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="update_modal_label">UPDATE PLACES</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="modal_city" class="col-sm-2 col-form-label">City:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="modal_city" class="form-control" id="modal_city">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="modal_district" class="col-sm-2 col-form-label">District:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="modal_district" class="form-control" id="modal_district">
+                        </div>
+                    </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+            </div>
+          </form>
+          </div>
+        </div>
+
+        <div id="place-table"></div>
+
+
+    </div>
+
+
+{% endblock %}
+
+{% block JS %}
+<script>
+
+var update_modal = function (place_id) {
+    let form_action = $('#modal_update_form').attr('action');
+    form_action = form_action.split('/');
+    form_action.pop(); // remove last character
+    form_action = form_action.join('/').concat('/');
+    form_action = form_action.concat(place_id);
+    $('#modal_update_form').attr('action', form_action);
+    let tr_id = '#tr_'.concat(place_id);
+    let tr_elem = $(tr_id);
+
+    let place_city = tr_elem.find('td:eq(0)').text();
+    let place_district = tr_elem.find('td:eq(1)').text();
+
+
+    $('#modal_city').val(place_city);
+    $('#modal_district').val(place_district);
+
+};
+
+var filter_places = function () {
+    let url = $('#filter_place_form').attr('action_url');
+    let city = $('#city_filter').val();
+    let district = $('#district_filter').val();
+
+    $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city':city,
+                'district':district,
+            },
+            success: function (data) {
+                $('#place-table').html(data);
+            }
+        });
+
+    };
+
+$(document).ready(function() {
+
+
+$('#city_select').change(function () {
+
+        var url = "/get_districts";
+        var city_name = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city_name':city_name
+            },
+            success: function (data) {
+                $('#district_select').html(data);
+            }
+        });
+    });
+
+$('#modal_city_select').change(function () {
+
+        var url = "/get_districts";
+        var city_name = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city_name':city_name
+            },
+            success: function (data) {
+                $('#modal_district_select').html(data);
+            }
+        });
+    });
+
+$('#city_select_filter').change(function () {
+
+        var url = "/get_districts";
+        var city_name = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city_name':city_name
+            },
+            success: function (data) {
+                $('#district_select_filter').html(data);
+            }
+        });
+    });
+
+
+});
+
+</script>
+{% endblock %}

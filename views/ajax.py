@@ -17,6 +17,19 @@ def get_hospitals_ajax():
     return response
 
 
+def filter_place_ajax():
+    city = request.form.get('city')
+    district = request.form.get('district')
+    if city == '':
+        city = None
+    if district == '':
+        district = None
+
+    places = Place(city,district).get_objects()
+
+    return render_template('sub_templates/filtered_place_table.html', places=places)
+
+
 def filter_hospital_ajax():
     city = request.form.get('city')
     district = request.form.get('district')

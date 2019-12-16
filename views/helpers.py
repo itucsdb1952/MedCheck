@@ -27,6 +27,7 @@ def check_where_exist(query: str, column: object, condition: str, like: bool = F
         condition = condition.format(column)
         if "WHERE" in query:
             new_query = f" AND ({condition}) "
+            new_query = f" AND ({condition}) "
         else:
             new_query = f" WHERE ({condition}) "
         return new_query

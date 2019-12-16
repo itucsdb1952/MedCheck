@@ -19,6 +19,7 @@ class Place:
 
         if len(args) >= 2:
             self.city, self.district = args[:2]
+
         elif len(args) == 1:
             self.city = args[0]
 
@@ -43,8 +44,8 @@ class Place:
                     else:
                         query = "SELECT ID, city, district FROM place "
 
-                    query += helpers.check_where_exist(query, self.city, "city = '{}'")
-                    query += helpers.check_where_exist(query, self.district, "district = '{}'")
+                    query += helpers.check_where_exist(query, self.city, r"city LIKE '%{}%'")
+                    query += helpers.check_where_exist(query, self.district, r"district LIKE '%{}%'")
 
                     cursor.execute(query)
                     records = cursor.fetchall()  # records = [(id,city,district),(id2,city2,district2)]
@@ -138,9 +139,9 @@ class Place:
         It updates the object according to given parameters.
         """
         if city is not None:
-            self.city = city
+            self.city = city.upper()
         if district is not None:
-            self.district = district
+            self.district = district.upper()
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
