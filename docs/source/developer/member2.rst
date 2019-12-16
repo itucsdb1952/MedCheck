@@ -26,7 +26,7 @@ Since doctors are first needed to be created as human class, first add_human fun
 .. code-block:: python
 	:linenos:
 
-	def add_doctor(human_id, workdays, expertise, hospital_id):
+	def add_human(human_id, workdays, expertise, hospital_id):
     try:
         with dbapi2.connect(db_url) as connection:
             with connection.cursor() as cursor:
@@ -41,4 +41,4 @@ Since doctors are first needed to be created as human class, first add_human fun
             cursor.close()
             connection.close()
 			
-Then add_doctor function is called from the information obtained from add_human function. 
+Then add_human function is called from the information obtained from add_human function.

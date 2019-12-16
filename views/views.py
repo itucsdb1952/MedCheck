@@ -25,11 +25,11 @@ def admin_hospitals_page():
 
 
 @let_to(['admin'])
-def doctors_page():
+def admin_humans_page():
     places = Place().get_objects(distinct_city=True)
     cities = [place.city for place in places]
 
-    return render_template('admin_doctors.html', cities=cities)
+    return render_template('admin_humans.html', cities=cities)
 
 
 def hospital_patient_page():
