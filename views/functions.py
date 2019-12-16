@@ -105,7 +105,7 @@ def update_hospital(hospital_id):
     return redirect(url_for(views.admin_hospitals_page.__name__))
 
 
-def add_doctor():
+def add_human():
     print("belki buraya gelmistir")
     name = request.form.get("doctor_name")
     surname = request.form.get("doctor_surname")
@@ -138,7 +138,7 @@ def add_doctor():
         doctor.save()
     #  else doctor is already created
 
-    return redirect(url_for('doctors_page'))
+    return redirect(url_for('admin_humans_page'))
 
 
 def delete_doctor():
@@ -146,7 +146,7 @@ def delete_doctor():
     human_for_check = Human(tc=tc).get_object()
     if human_for_check is not None:
         Doctor(human=human_for_check).delete()
-    return redirect(url_for('doctors_page'))
+    return redirect(url_for('admin_humans_page'))
 
 
 def add_person():
