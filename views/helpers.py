@@ -1,4 +1,5 @@
 def checkbox_to_bool(checkbox_value: str) -> bool:
+    checkbox_value = checkbox_value.lower()
     if checkbox_value == 'on' or checkbox_value == 'true':
         return True
     else:

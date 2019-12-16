@@ -10,7 +10,7 @@
             <div class="col">
                 <h4 class="text-center">ADD HOSPITAL</h4>
                 <hr>
-                <form method="POST" action="/add_hospital">
+                <form method="POST" action="{{ url_for('add_hospital') }}">
                     <div class="form-group row">
                         <label for="hospital_name" class="col-sm-2 col-form-label">Name:</label>
                         <div class="col-sm-10">
@@ -40,8 +40,8 @@
                         <div class="col-sm-2">Park: </div>
                         <div class="col-sm-4">
                             <div class="form-check">
-                                <input class="form-check-input" name="park" type="checkbox" id="gridCheck1">
-                                <label class="form-check-label" for="gridCheck1">
+                                <input class="form-check-input" name="park" type="checkbox" id="park">
+                                <label class="form-check-label" for="park">
                                     True
                                 </label>
                             </div>
@@ -50,8 +50,8 @@
                         <div class="col-sm-3">Handicapped: </div>
                         <div class="col-sm-2">
                             <div class="form-check">
-                                <input class="form-check-input" name="handicapped" type="checkbox" id="gridCheck1">
-                                <label class="form-check-label" for="gridCheck1">
+                                <input class="form-check-input" name="handicapped" type="checkbox" id="handicapped">
+                                <label class="form-check-label" for="handicapped">
                                     True
                                 </label>
                             </div>
@@ -109,6 +109,9 @@
                         <div class="col-sm-4">
                             <div class="form-check">
                                 <input class="form-check-input" name="park_filter" type="checkbox" id="park_filter">
+                                <label class="form-check-label" for="park_filter">
+                                    True
+                                </label>
                             </div>
                         </div>
 
@@ -116,6 +119,9 @@
                         <div class="col-sm-2">
                             <div class="form-check">
                                 <input class="form-check-input" name="handicapped_filter" type="checkbox" id="handicapped_filter" checked>
+                                <label class="form-check-label" for="handicapped_filter">
+                                    True
+                                </label>
 
                             </div>
                         </div>
@@ -130,7 +136,75 @@
 
                 </form>
             </div>
+        </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="update_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="update_modal_label" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+          <form method="POST" id="modal_update_form" action="{{ url_for('update_hospital', hospital_id=0) }}">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="update_modal_label">UPDATE HOSPITAL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="modal_hospital_name" class="col-sm-2 col-form-label">Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="modal_hospital_name" class="form-control" id="modal_hospital_name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="modal_city_select" class="col-sm-2 col-form-label">City: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="modal_city_select" id="modal_city_select">
+                                {% for city in cities %}
+                                     <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+
+                        </select>
+                        </div>
+
+                        <label for="modal_district_select" class="col-sm-2 col-form-label">District: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="modal_district_select" id="modal_district_select">
+                                 <option value="">Choose a City</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-2">Park: </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input class="form-check-input" name="modal_park" type="checkbox" id="modal_park">
+                                <label class="form-check-label" for="modal_park">
+                                    True
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">Handicapped: </div>
+                        <div class="col-sm-2">
+                            <div class="form-check">
+                                <input class="form-check-input" name="modal_handicapped" type="checkbox" id="modal_handicapped" checked>
+                                <label class="form-check-label" for="modal_handicapped">
+                                    True
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+            </div>
+          </form>
+          </div>
         </div>
 
         <div id="hospital-table"></div>
@@ -144,7 +218,28 @@
 {% block JS %}
 <script>
 
+var update_modal = function (hospital_id) {
+    let form_action = $('#modal_update_form').attr('action');
+    form_action = form_action.slice(0, -1); // remove last character: 0
+    form_action = form_action.concat(hospital_id);
+    $('#modal_update_form').attr('action', form_action);
+    let tr_id = '#tr_'.concat(hospital_id);
+    let tr_elem = $(tr_id);
+    let hospital_name = tr_elem.find('td:eq(0)').text();
+    let hospital_city_district = tr_elem.find('td:eq(1)').text();
+    hospital_city_district = hospital_city_district.split('/');
+    let hospital_city = hospital_city_district[0];
+    let hospital_district = hospital_city_district[1];
+    let hospital_handicapped = tr_elem.find('td:eq(4)').text();
+    let hospital_park = tr_elem.find('td:eq(5)').text();
 
+
+    $('#modal_hospital_name').val(hospital_name);
+    $('#modal_city_select').val(hospital_city);
+    //$('#modal_district_select').val(hospital_district);
+    $('#modal_park').val(hospital_park);
+    $('#modal_handicapped').val(hospital_handicapped);
+};
 
 var filter_hospitals = function () {
     let url = $('#filter_hospital_form').attr('action_url');
@@ -194,6 +289,22 @@ $('#city_select').change(function () {
         });
     });
 
+$('#modal_city_select').change(function () {
+
+        var url = "/get_districts";
+        var city_name = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url:url,
+            data: {
+                'city_name':city_name
+            },
+            success: function (data) {
+                $('#modal_district_select').html(data);
+            }
+        });
+    });
+
 $('#city_select_filter').change(function () {
 
         var url = "/get_districts";
@@ -209,30 +320,6 @@ $('#city_select_filter').change(function () {
             }
         });
     });
-
-
-
-/*$('#district_select_filter').change(function () {
-
-        var url = $('#filter_hospital_form').att;
-        alert(url);
-        var city_name = $('#city_select_filter').val();
-        var district_name = $(this).val();
-        $.ajax({
-            type: 'POST',
-            url:url,
-            data: {
-                'city_name':city_name,
-                'district_name':district_name
-            },
-            success: function (data) {
-                $('#hospital_select_filter').html(data);
-            }
-        });
-    });
-
-});*/
-
 
 
 });

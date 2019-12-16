@@ -88,6 +88,23 @@ def del_hospital(hospital_id):
     return redirect(url_for(views.admin_hospitals_page.__name__))
 
 
+def update_hospital(hospital_id):
+    hospital_name = request.form.get('modal_hospital_name')
+    city = request.form.get('modal_city_select')
+    district = request.form.get('modal_district_select')
+    a = request.form.get('modal_park')
+    park = helpers.checkbox_to_bool(request.form.get('modal_park'))
+    handicapped = helpers.checkbox_to_bool(request.form.get('modal_handicapped'))
+
+    if city and district:
+        address = Place(city, district).get_objects()[0]
+    else:
+        address = None
+
+    Hospital(id=hospital_id).update(hospital_name, address, handicapped=handicapped, park=park)
+    return redirect(url_for(views.admin_hospitals_page.__name__))
+
+
 def add_doctor():
     print("belki buraya gelmistir")
     name = request.form.get("doctor_name")
@@ -147,7 +164,6 @@ def add_person():
         human.save()
 
     return redirect(url_for('login_page'))
-
 
 
 def let_to(auths: list):

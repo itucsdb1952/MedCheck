@@ -19,6 +19,7 @@ def create_app():
     # FUNCTIONS
     app.add_url_rule("/add_hospital", view_func=functions.add_hospital, methods=['POST'])
     app.add_url_rule("/del_hospital/<int:hospital_id>", view_func=functions.del_hospital, methods=['GET'])
+    app.add_url_rule("/update_hospital/<int:hospital_id>", view_func=functions.update_hospital, methods=['POST'])
     app.add_url_rule("/add_doctor", view_func=functions.add_doctor, methods=['POST'])
     app.add_url_rule("/delete_doctor", view_func=functions.delete_doctor, methods=['POST'])
     app.add_url_rule("/add_person", view_func=functions.add_person, methods=['POST'])

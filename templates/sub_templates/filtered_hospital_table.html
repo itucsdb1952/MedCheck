@@ -17,14 +17,17 @@
     </thead>
     <tbody>
     {% for hospital in hospitals %}
-    <tr>
+    <tr id="tr_{{ hospital.id }}">
         <td>{{ hospital.name }}</td>
         <td>{{ hospital.address.city }}/{{ hospital.address.district }}</td>
         <td>{{ hospital.rate }}</td>
         <td>{{ hospital.capacity }}</td>
         <td>{{ hospital.handicapped }}</td>
         <td>{{ hospital.park }}</td>
-        <td><a href="update_hospital({{ hospital.id }});"><i class="fa fa-edit"></i></a>
+        <td>
+            <a data-toggle="modal" data-target="#update_modal" onclick="update_modal({{ hospital.id }});" href="#">
+                <i class="fa fa-edit"></i>
+            </a>
             <a href="{{ url_for('del_hospital', hospital_id = hospital.id) }}"><i class="fa fa-trash-alt"></i></a>
         </td>
     </tr>
