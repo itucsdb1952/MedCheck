@@ -13,7 +13,7 @@ Code
 ----
 
 
-   .. code-block:: python
+.. code-block:: python
 
       class Foo:
 
@@ -22,6 +22,6 @@ Code
 
 .. toctree::
 
-   Furkan Guvenc
-   Emre Faruk Kolac
+	developer/member1
+	developer/member2
 
