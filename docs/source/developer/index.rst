@@ -3,6 +3,7 @@ Developer Guide
 
 Database Design
 ---------------
+.. image:: /medchecklogo.png
 
 **explain the database design of your project**
 
