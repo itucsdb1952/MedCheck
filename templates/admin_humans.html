@@ -156,11 +156,11 @@
                     <div class="form-group row">
                         <label for="human_name_filter" class="col-sm-2 col-form-label">Name:</label>
                         <div class="col-sm-4">
-                            <input type="text" name="human_name_filter" class="form-control" id="human_name_filter" placeholder="Maria">
+                            <input type="text" name="human_name_filter" class="form-control" id="human_name_filter" placeholder="Canan">
                         </div>
                         <label for="human_surname_filter" class="col-sm-2 col-form-label">Surname:</label>
                         <div class="col-sm-4">
-                            <input type="text" name="human_surname_filter" class="form-control" id="human_surname_filter" >
+                            <input type="text" name="human_surname_filter" class="form-control" id="human_surname_filter" placeholder="Karatay">
                         </div>
                     </div>
 
@@ -200,8 +200,12 @@
               <div class="modal-body">
                     <div class="form-group row">
                         <label for="modal_human_name" class="col-sm-2 col-form-label">Name:</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-4">
                             <input type="text" name="modal_human_name" class="form-control" id="modal_human_name">
+                        </div>
+                        <label for="modal_human_surname" class="col-sm-2 col-form-label">Surname:</label>
+                        <div class="col-sm-4">
+                            <input type="text" name="modal_human_surname" class="form-control" id="modal_human_surname">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -222,26 +226,19 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group row">
-                        <div class="col-sm-2">Park: </div>
+                        <label for="modal_human_mail" class="col-sm-2 col-form-label">Email:</label>
                         <div class="col-sm-4">
-                            <div class="form-check">
-                                <input class="form-check-input" name="modal_park" type="checkbox" id="modal_park">
-                                <label class="form-check-label" for="modal_park">
-                                    True
-                                </label>
-                            </div>
+                            <input type="email" name="modal_human_mail" class="form-control" id="modal_human_mail">
                         </div>
 
-                        <div class="col-sm-3">Handicapped: </div>
-                        <div class="col-sm-2">
-                            <div class="form-check">
-                                <input class="form-check-input" name="modal_handicapped" type="checkbox" id="modal_handicapped" checked>
-                                <label class="form-check-label" for="modal_handicapped">
-                                    True
-                                </label>
-                            </div>
+                        <label for="modal_authorize_select" class="col-sm-2 col-form-label">Authorize: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="modal_authorize_select" id="modal_authorize_select">
+                                <option value="admin">Admin</option>
+                                <option value="doctor" selected>Doctor</option>
+                                <option value="normal">Normal</option>
+                            </select>
                         </div>
                     </div>
 
@@ -265,28 +262,39 @@
 {% block JS %}
 <script>
 
-var update_modal = function (human_id) {
+var update_modal = function (human_tc) {
+
     let form_action = $('#modal_update_form').attr('action');
-    form_action = form_action.slice(0, -1); // remove last character: 0
-    form_action = form_action.concat(human_id);
+    form_action = form_action.split('/');
+    form_action.pop(); // remove last character
+    form_action = form_action.join('/').concat('/');
+    form_action = form_action.concat(human_tc);
     $('#modal_update_form').attr('action', form_action);
-    let tr_id = '#tr_'.concat(human_id);
+    let tr_id = '#tr_'.concat(human_tc);
     let tr_elem = $(tr_id);
 
-    let human_name = tr_elem.find('td:eq(0)').text();
-    let human_city_district = tr_elem.find('td:eq(1)').text();
+
+    let human_name_surname = tr_elem.find('td:eq(1)').text();
+    human_name_surname = human_name_surname.split(' ');
+    let human_name = human_name_surname[0];
+    let human_surname = human_name_surname[1];
+
+    let human_mail = tr_elem.find('td:eq(2)').text();
+
+    let human_city_district = tr_elem.find('td:eq(3)').text();
     human_city_district = human_city_district.split('/');
     let human_city = human_city_district[0];
     let human_district = human_city_district[1];
-    let human_handicapped = tr_elem.find('td:eq(4)').text();
-    let human_park = tr_elem.find('td:eq(5)').text();
+
+    let human_authorize = tr_elem.find('td:eq(4)').text();
 
 
     $('#modal_human_name').val(human_name);
+    $('#modal_human_surname').val(human_surname);
+    $('#modal_human_mail').val(human_mail);
     $('#modal_city_select').val(human_city);
-    //$('#modal_district_select').val(human_district);
-    $('#modal_park').val(human_park);
-    $('#modal_handicapped').val(human_handicapped);
+    $('#modal_authorize_select').val(human_authorize);
+
 };
 
 var filter_humans = function () {
