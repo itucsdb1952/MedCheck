@@ -1,8 +1,9 @@
 User Guide
 ==========
 
-**explain how your application works from the user perspective, use
-screenshots whereever appropriate**
+MedCheck is a site that especially designed to bring patients and hospitals together and help both sides. Instead of going to hospital, patients can sign up and fill their profile. Then they can easily have a appointment.
+
+There are 2 user types. Doctor and patient. They can both register to the system using sign up page and update their profiles whenever they want.
 
 **to add a picture, use the following example**::
 
@@ -14,7 +15,7 @@ screenshots whereever appropriate**
 
 .. toctree::
 
-   Furkan Guvenc
-   Emre Faruk Kolac
+   user/member1
+   user/member2
 
    
