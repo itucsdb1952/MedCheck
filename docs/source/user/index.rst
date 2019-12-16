@@ -13,9 +13,6 @@ There are 2 user types. Doctor and patient. They can both register to the system
 
       This is the caption of the figure (a simple paragraph).
 
-.. toctree::
 
-   user/member1
-   user/member2
 
    
