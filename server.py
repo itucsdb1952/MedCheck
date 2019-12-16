@@ -20,6 +20,7 @@ app.add_url_rule("/del_hospital/<int:hospital_id>", view_func=functions.del_hosp
 app.add_url_rule("/update_hospital/<int:hospital_id>", view_func=functions.update_hospital, methods=['POST'])
 app.add_url_rule("/add_human", view_func=functions.add_human, methods=['POST'])
 app.add_url_rule("/del_human/<string:human_tc>", view_func=functions.del_human, methods=['GET'])
+app.add_url_rule("/update_human/<string:human_tc>", view_func=functions.update_human, methods=['POST'])
 
 app.add_url_rule("/delete_doctor", view_func=functions.delete_doctor, methods=['POST'])
 app.add_url_rule("/add_person", view_func=functions.add_person, methods=['POST'])

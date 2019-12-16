@@ -146,6 +146,23 @@ def del_human(human_tc):
     return redirect(url_for(views.admin_humans_page.__name__))
 
 
+def update_human(human_tc):
+    human_name = request.form.get('modal_human_name')
+    city = request.form.get('modal_city_select')
+    district = request.form.get('modal_district_select')
+    a = request.form.get('modal_park')
+    park = helpers.checkbox_to_bool(request.form.get('modal_park'))
+    handicapped = helpers.checkbox_to_bool(request.form.get('modal_handicapped'))
+
+    if city and district:
+        address = Place(city, district).get_objects()[0]
+    else:
+        address = None
+
+    Human(tc=human_tc).update(human_name, address)
+    return redirect(url_for(views.admin_humans_page.__name__))
+
+
 def delete_doctor():
     tc = request.form.get("doctor_tc")
     human_for_check = Human(tc=tc).get_object()
