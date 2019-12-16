@@ -1,6 +1,7 @@
 from flask import request
 from models import Place, Hospital
 
+
 def get_districts_ajax():
     places = Place(request.form.get('city_name')).get_objects()
     response = " ".join(['<option value="{}">{}</option>'.format(place.district, place.district) for place in places])

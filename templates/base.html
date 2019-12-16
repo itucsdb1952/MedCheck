@@ -31,8 +31,8 @@
         <a class="nav-link" href="{{ url_for('admin_page') }}">Home </a>
       </li>
 
-      <li class="nav-item {% if url_for('hospitals_page') == url_for(request.endpoint) %}active{% endif %}">
-        <a class="nav-link" href="{{ url_for('hospitals_page') }}">Hospitals </a>
+      <li class="nav-item {% if url_for('admin_hospitals_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('admin_hospitals_page') }}">Hospitals </a>
       </li>
       <li class="nav-item {% if url_for('doctors_page') == url_for(request.endpoint) %}active{% endif %}">
         <a class="nav-link" href="{{ url_for('doctors_page') }}">Doctors </a>
@@ -51,7 +51,7 @@
       </li>
     </ul>
     <span class="navbar-text">
-      Profile
+      <a href="#">Profile</a>
     </span>
   </div>
 </nav>

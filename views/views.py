@@ -1,11 +1,11 @@
-from flask import render_template, session
+from flask import render_template, session, redirect, url_for
 
 from models import Place, Human
 from views import functions
 from views.functions import let_to
 
 
-@let_to(['admin', 'doctor'])
+@let_to(['admin'])
 def admin_page():
     try:
         hospitals = functions.get_hospitals_with_place()
@@ -16,14 +16,15 @@ def admin_page():
         return render_template('admin.html', hospitals=hospitals)
 
 
-@let_to(['doctor'])
-def hospitals_page():
+@let_to(['admin'])
+def admin_hospitals_page():
     places = Place().get_objects(distinct_city=True)
     cities = [place.city for place in places]
 
     return render_template('admin_hospitals.html', cities=cities)
 
 
+@let_to(['admin'])
 def doctors_page():
     places = Place().get_objects(distinct_city=True)
     cities = [place.city for place in places]
@@ -45,7 +46,7 @@ def login_page():
         elif user_auth == 'doctor':
             return user_tc + " " + user_auth
         elif user_auth == 'admin':
-            return user_tc + " " + user_auth
+            return redirect(url_for(admin_page.__name__))
 
     print("no user tc or auth")
     return render_template("login.html")

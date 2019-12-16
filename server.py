@@ -8,7 +8,7 @@ def create_app():
 
     # VIEWS
     app.add_url_rule("/home", view_func=views.admin_page)
-    app.add_url_rule("/hospitals", view_func=views.hospitals_page)
+    app.add_url_rule("/hospitals", view_func=views.admin_hospitals_page)
     app.add_url_rule("/hospital_patient", view_func=views.hospital_patient_page)
     app.add_url_rule("/", view_func=views.login_page)
     app.add_url_rule("/register", view_func=views.register_page)
