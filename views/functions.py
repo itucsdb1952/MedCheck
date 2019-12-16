@@ -106,12 +106,12 @@ def update_hospital(hospital_id):
 
 
 def add_human():
-    print("belki buraya gelmistir")
     name = request.form.get("doctor_name")
     surname = request.form.get("doctor_surname")
     tc = request.form.get("doctor_tc")
     password = request.form.get("doctor_password")
     email = request.form.get("doctor_email")
+    authorize = request.form.get("authorize_select")
     city = request.form.get("city_select_add")
     district = request.form.get("district_select_add")
     address = Place(city=city, district=district).get_objects()[0]

@@ -47,7 +47,7 @@
                             <select class="form-control" name="authorize_select" id="authorize_select">
                                 <option value="admin">Admin</option>
                                 <option value="doctor">Doctor</option>
-                                <option value="normal">Normal</option>
+                                <option value="normal" selected>Normal</option>
                             </select>
                         </div>
                     </div>
@@ -190,6 +190,12 @@ $('#district_select_add').change(function () {
             }
         });
     });
+
+$('#authorize_select').change(function () {
+
+        $(this)
+    });
+
 
 });
 
