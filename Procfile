@@ -1,2 +1,2 @@
-web: gunicorn server:myapp
+web: gunicorn server:app
 release: python dbinit.py
