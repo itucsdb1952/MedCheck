@@ -78,7 +78,8 @@ def login():
                     if password_ == password:
                         session['user_tc'] = tc_
                         session['user_auth'] = authorize_
-                    return redirect('/')
+                return redirect(url_for(views.login_page.__name__))
+
     except (Exception, dbapi2.Error) as error:
         print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
 
@@ -255,16 +256,33 @@ def add_person():
     surname = request.form.get("surname")
     tc = request.form.get("tc")
     email = request.form.get("email")
-    address = request.form.get("address")
     password = request.form.get("password")
-    authorization = request.form.get("authorization")
-    human_for_check = Human(tc=tc).get_object()
-    if human_for_check is None:
-        human = Human(tc=tc, password=password, authorize=authorization, name=name, surname=surname, mail=email,
+    city = request.form.get("city_select_add")
+    district = request.form.get("district_select_add")
+    address = Place(city=city, district=district).get_objects()[0]
+
+    human = Human(tc=tc).get_object()
+    if human is None:
+        human = Human(tc=tc, password=password, name=name, surname=surname, mail=email,
                       address=address)
         human.save()
 
-    return redirect(url_for('login_page'))
+
+
+
+    name = request.form.get("name")
+    surname = request.form.get("surname")
+    tc = request.form.get("tc")
+    email = request.form.get("email")
+    address = request.form.get("address")
+    password = request.form.get("password")
+    human_for_check = Human(tc=tc).get_object()
+    if human_for_check is None:
+        human = Human(tc=tc, password=password, name=name, surname=surname, mail=email,
+                      address=address)
+        human.save()
+
+    return redirect(url_for(views.login_page.__name__))
 
 
 def let_to(auths: list):

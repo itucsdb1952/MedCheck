@@ -50,7 +50,9 @@ def login_page():
 
 
 def register_page():
-    return render_template("Register.html")
+    places = Place().get_objects(distinct_city=True)
+    cities = [place.city for place in places]
+    return render_template("Register.html", cities=cities)
 
 
 def how_to_use_page():
