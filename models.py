@@ -213,7 +213,7 @@ class Hospital:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    query = f"SELECT id,name,address,rate,capacity,handicapped,park FROM hospital WHERE id = {self.id}  "
+                    query = f"SELECT id,name,address,rate,capacity,handicapped,park FROM hospital WHERE id = '{self.id}';"
                     cursor.execute(query)
                     record = cursor.fetchone()
         except (Exception, dbapi2.Error) as error:
@@ -675,7 +675,7 @@ class History:
         self.date = None
         self.doctor = None  # Doctor object
         self.patient = None  # Human object
-        self.sickness = ' '
+        self.sickness = ''
         self.hospital = None  # Hospital object
         self.id = None
 
@@ -720,7 +720,7 @@ class History:
 
                     query += helpers.check_where_exist(query, self.date, "date = '{}'")
                     query += helpers.check_where_exist(query, self.sickness, "sickness LIKE '%{}%'")
-
+                    print(query)
                     if limit:
                         query += f"LIMIT {limit}"
 

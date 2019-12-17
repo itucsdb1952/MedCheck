@@ -21,7 +21,7 @@ def get_doctors_ajax():
     hospital = Hospital(id=request.form.get('hospital_id')).get_object()
     doctors = Doctor(hospital=hospital).get_objects()
     response = " ".join(
-        ['<option value="{}">{}</option>'.format(doctor.human.tc, doctor.human.name) for doctor in doctors])
+        ['<option value="{}">{}</option>'.format(doctor.human.tc, doctor.human.name + " " + doctor.human.surname) for doctor in doctors])
     return response
 
 

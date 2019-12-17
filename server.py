@@ -15,6 +15,7 @@ app.add_url_rule("/humans", view_func=views.admin_humans_page)
 app.add_url_rule("/how_to_use", view_func=views.how_to_use_page)
 app.add_url_rule("/403", view_func=views.forbidden_403_page)
 
+app.add_url_rule("/my_history", view_func=views.user_history_page)
 
 # FUNCTIONS
 app.add_url_rule("/add_place", view_func=functions.add_place, methods=['POST'])

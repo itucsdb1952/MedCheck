@@ -1,6 +1,6 @@
 from flask import render_template, session, redirect, url_for
 
-from models import Place, Human
+from models import *
 from views import functions
 from views.functions import let_to
 
@@ -63,5 +63,14 @@ def forbidden_403_page():
     return render_template("403.html")
 
 
-def user_home():
+@let_to(['normal'])
+def user_home_page():
     return render_template("user_home.html")
+
+
+@let_to(['normal'])
+def user_history_page():
+    patient = Human(tc=session['user_tc']).get_object()
+    histories = History(patient=patient).get_objects()
+
+    return render_template("user_history.html", histories=histories, user_auth=session['user_auth'])  # user_auth: for navbar
