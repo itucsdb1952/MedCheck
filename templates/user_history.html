@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="container">
+        {% if histories %}
+        <br>
+        <hr>
+        <h4 class="text-center">HISTORY</h4>
+        
+        <table class="table table-hover table-inverse">
+            <thead class="thead-inverse">
+            <tr>
+                <th>Date</th>
+                <th>Doctor</th>
+                <th>Sickness</th>
+                <th>Hospital</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for history in histories %}
+            <tr id="tr_{{ history.id }}">
+                <td>{{ history.date }}</td>
+                <td>{{ history.doctor.human.name }} {{ history.doctor.human.username }}</td>
+                <td>{{ history.sickness }}</td>
+                <td>{{ history.hospital.name }}</td>
+            </tr>
+            {% endfor %}
+        
+            </tbody>
+        </table>
+        {% endif %}
+
+    </div>
+{% endblock %}

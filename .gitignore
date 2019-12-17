@@ -11,6 +11,8 @@ __pycache__
 venv/
 docs/build/
 
+static/uploads/*
+
 schema.txt
 static/fontawesome-free-5.11.2-web/
 

@@ -1,0 +1,24 @@
+<br>
+<hr>
+<h4 class="text-center">Your Doctor</h4>
+
+<table class="table table-hover table-inverse">
+    <thead class="thead-inverse">
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Workdays</th>
+        <th>Expertise</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr id="tr_doctor_info">
+        <td>{{ doctor.human.name }}</td>
+        <td>{{ doctor.human.surname }}</td>
+        <td>{% for workday in workdays %}{{ workday }}{% if loop.index != loop.last %},{% endif %} {% endfor %}</td>
+        <td>{{ doctor.expertise }}</td>
+
+    </tr>
+
+    </tbody>
+</table>
