@@ -1,5 +1,5 @@
 from flask import request, render_template
-from models import Place, Hospital, Human
+from models import Place, Hospital, Human, Doctor
 from views import helpers
 
 
@@ -17,6 +17,26 @@ def get_hospitals_ajax():
     return response
 
 
+def get_doctors_ajax():
+    hospital = Hospital(id=request.form.get('hospital_id')).get_object()
+    doctors = Doctor(hospital=hospital).get_objects()
+    response = " ".join(
+        ['<option value="{}">{}</option>'.format(doctor.human.tc, doctor.human.name) for doctor in doctors])
+    return response
+
+
+def get_doctor_info_ajax():
+    human = Human(tc=request.form.get('doctor_tc')).get_object()
+    doctor = Doctor(human=human).get_object()
+    day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    workdays_ = doctor.workdays
+    workdays = list()
+    for i, workday_ in enumerate(workdays_):
+        if int(workday_) == i + 1:
+            workdays.append(day_list[i + 1])
+    return render_template('sub_templates/doctor_info.html', doctor=doctor, workdays=workdays)
+
+
 def filter_place_ajax():
     city = request.form.get('city')
     district = request.form.get('district')
@@ -25,7 +45,7 @@ def filter_place_ajax():
     if district == '':
         district = None
 
-    places = Place(city,district).get_objects()
+    places = Place(city, district).get_objects()
 
     return render_template('sub_templates/filtered_place_table.html', places=places)
 

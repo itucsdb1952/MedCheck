@@ -4,7 +4,7 @@ from flask import request
 from werkzeug.utils import secure_filename
 
 from views import helpers, views
-from models import Place, Hospital, Human, Doctor
+from models import Place, Hospital, Human, Doctor, History
 
 import psycopg2 as dbapi2
 import sys, os
@@ -81,6 +81,13 @@ def login():
                     return redirect('/')
     except (Exception, dbapi2.Error) as error:
         print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+
+
+def logout():
+    if 'user_auth' and 'user_tc' in session:
+        session.pop('user_auth', 0)
+        session.pop('user_tc', 0)
+    return redirect(url_for(views.login_page.__name__))
 
 
 def add_place():
@@ -218,6 +225,21 @@ def update_human(human_tc):
 
     Human(tc=human_tc).update(address=address, name=name, surname=surname, mail=mail, authorize=authorize)
     return redirect(url_for(views.admin_humans_page.__name__))
+
+
+def add_history():
+    patient = Human(tc=session['user_tc']).get_object()
+    doctor_tc = request.form.get('doctor_select')
+    doctor = Doctor(human=Human(tc=doctor_tc).get_object()).get_object()
+    hospital_id = request.form.get('hospital_select')
+    hospital = Hospital(id=hospital_id).get_object()
+    sickness = request.form.get('sickness')
+    date = request.form.get('date')
+    time = request.form.get('time')
+    date_time = date + " " + time
+
+    History(date=date_time, patient=patient, doctor=doctor, hospital=hospital, sickness=sickness).save()
+    return redirect(url_for(views.home_page.__name__))
 
 
 def delete_doctor():

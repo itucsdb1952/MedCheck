@@ -5,11 +5,6 @@ from views import helpers
 
 
 # CRUD
-# get objects, objeli ver
-# get object, id e göre objeyi döner
-# save, obje verilir id li keydeder
-# update, obje verilir id li kaydeder
-# delete, id e göre siler
 
 class Place:
     def __init__(self, *args, **kwargs):
@@ -67,8 +62,8 @@ class Place:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    address_statement = "SELECT ID, city, district FROM place WHERE id = {}  ".format(self.id)
-                    cursor.execute(address_statement)
+                    query = "SELECT ID, city, district FROM place WHERE id = {}  ".format(self.id)
+                    cursor.execute(query)
                     record = cursor.fetchone()  # record = (id,city,district),
         except (Exception, dbapi2.Error) as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -79,27 +74,6 @@ class Place:
                 place = Place(city=record[1], district=record[2], id=record[0])  # record = (id,city,district)
                 return place
 
-    def __get_id(self) -> int:
-        """
-        READ
-        It returns address id according to city and district
-        :return: Object id
-        """
-
-        try:
-            with dbapi2.connect(db_url) as connection:
-                with connection.cursor() as cursor:
-                    address_statement = "SELECT ID FROM place WHERE (city = '{}' AND district = '{}') ".format(
-                        self.city,
-                        self.district)
-                    cursor.execute(address_statement)
-                    record = cursor.fetchone()
-        except (Exception, dbapi2.Error) as error:
-            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
-        else:
-            self.id = record[0]
-            return self.id
-
     def save(self):
         """
         CREATE
@@ -108,14 +82,15 @@ class Place:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    insert_statement = "INSERT INTO place(city, district) VALUES('{}','{}') ".format(self.city,
-                                                                                                     self.district)
-                    cursor.execute(insert_statement)
+                    query = "INSERT INTO place(city, district) VALUES('{}','{}') RETURNING id".format(self.city,
+                                                                                                      self.district)
+                    cursor.execute(query)
+                    record = cursor.fetchone()
 
         except (Exception, dbapi2.Error) as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
         else:
-            self.id = self.__get_id()
+            self.id = record
 
     def delete(self) -> None:
         """
@@ -125,8 +100,8 @@ class Place:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    delete_statement = "DELETE FROM place WHERE id = '{}' ".format(self.id)
-                    cursor.execute(delete_statement)
+                    query = "DELETE FROM place WHERE id = '{}' ".format(self.id)
+                    cursor.execute(query)
 
         except dbapi2.Error as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -145,9 +120,9 @@ class Place:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    update_statement = "UPDATE place SET city='{}', district='{}' WHERE (id='{}') " \
+                    query = "UPDATE place SET city='{}', district='{}' WHERE (id='{}') " \
                         .format(self.city, self.district, self.id)
-                    cursor.execute(update_statement)
+                    cursor.execute(query)
 
         except dbapi2.Error as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -252,25 +227,6 @@ class Hospital:
                                     handicapped=handicapped, park=park, id=id_)  # record = (id,city,district)
                 return hospital
 
-    def __get_id(self) -> int:
-        """
-        READ
-        It returns hospital id according to [name and address]
-        :return: Object id
-        """
-
-        try:
-            with dbapi2.connect(db_url) as connection:
-                with connection.cursor() as cursor:
-                    address_statement = f"SELECT ID FROM hospital WHERE (name = '{self.name}' AND address = '{self.address.id}')  "
-                    cursor.execute(address_statement)
-                    record = cursor.fetchone()
-        except (Exception, dbapi2.Error) as error:
-            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
-        else:
-            self.id = record[0]
-            return self.id
-
     def save(self):
         """
         CREATE
@@ -280,15 +236,16 @@ class Hospital:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    insert_statement = "INSERT INTO hospital(name, address, rate, capacity, handicapped, park)" \
-                                       f" VALUES('{self.name}','{self.address.id}','{self.rate}','{self.capacity}','{self.handicapped}','{self.park}') "
-                    cursor.execute(insert_statement)
+                    query = "INSERT INTO hospital(name, address, rate, capacity, handicapped, park)" \
+                                       f" VALUES('{self.name}','{self.address.id}','{self.rate}','{self.capacity}','{self.handicapped}','{self.park}') RETURNING id"
+                    cursor.execute(query)
+                    record = cursor.fetchone()
 
         except (Exception, dbapi2.Error) as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
 
         else:
-            self.id = self.__get_id()
+            self.id = record
 
     def delete(self) -> None:
         """
@@ -298,8 +255,8 @@ class Hospital:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    delete_statement = f"DELETE FROM hospital WHERE id = '{self.id}'"
-                    cursor.execute(delete_statement)
+                    query = f"DELETE FROM hospital WHERE id = '{self.id}'"
+                    cursor.execute(query)
 
         except dbapi2.Error as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -327,11 +284,11 @@ class Hospital:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    update_statement = f"UPDATE hospital SET name='{self.name}', address='{self.address.id}'," \
+                    query = f"UPDATE hospital SET name='{self.name}', address='{self.address.id}'," \
                                        f" rate='{self.rate}', capacity='{self.capacity}', " \
                                        f"handicapped='{self.handicapped}', park='{self.park}' WHERE (id='{self.id}') "
 
-                    cursor.execute(update_statement)
+                    cursor.execute(query)
 
         except dbapi2.Error as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -491,8 +448,8 @@ class Human:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    delete_statement = f"DELETE FROM human WHERE tc = '{self.tc}' "
-                    cursor.execute(delete_statement)
+                    query = f"DELETE FROM human WHERE tc = '{self.tc}' "
+                    cursor.execute(query)
 
         except dbapi2.Error as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -528,7 +485,7 @@ class Human:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    update_statement = "UPDATE human SET tc='{}', password='{}', authorize='{}', name='{}'," \
+                    query = "UPDATE human SET tc='{}', password='{}', authorize='{}', name='{}'," \
                                        " surname='{}', mail='{}', address='{}', age='{}', weight='{}', height='{}'" \
                                        " WHERE (tc='{}') ".format(tc,
                                                                   self.password,
@@ -542,7 +499,7 @@ class Human:
                                                                   self.weight,
                                                                   self.tc)
 
-                    cursor.execute(update_statement)
+                    cursor.execute(query)
 
         except dbapi2.Error as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -638,7 +595,7 @@ class Doctor:
             else:
                 humantc, workdays, expertise, hospital, rate = record
                 doctor = Doctor(workdays=workdays, expertise=expertise, hospital=hospital, rate=rate,
-                                human=humantc.tc)  # record = (id,city,district)
+                                human=Human(tc=humantc).get_object())  # record = (id,city,district)
                 return doctor
 
     def save(self):
@@ -666,8 +623,8 @@ class Doctor:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    delete_statement = f"DELETE FROM doctor WHERE humantc = '{self.human.tc}' "
-                    cursor.execute(delete_statement)
+                    query = f"DELETE FROM doctor WHERE humantc = '{self.human.tc}' "
+                    cursor.execute(query)
 
         except dbapi2.Error as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -697,11 +654,11 @@ class Doctor:
         try:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
-                    update_statement = f"UPDATE doctor SET humantc='{self.human.tc}', hospital='{self.hospital.id}'," \
+                    query = f"UPDATE doctor SET humantc='{self.human.tc}', hospital='{self.hospital.id}'," \
                                        f" rate='{self.rate}', workdays='{self.workdays}', " \
                                        f"expertise='{self.expertise}' WHERE (humantc='{tc}') "
 
-                    cursor.execute(update_statement)
+                    cursor.execute(query)
 
         except dbapi2.Error as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
@@ -710,3 +667,170 @@ class Doctor:
 
     def __str__(self):
         return f"{self.__class__.__name__}: {self.human.name} C:{self.human.surname} Hosp:{self.hospital.name} TC:{self.human.tc}"
+
+
+class History:
+    def __init__(self, *args, **kwargs):
+
+        self.date = None
+        self.doctor = None  # Doctor object
+        self.patient = None  # Human object
+        self.sickness = ' '
+        self.hospital = None  # Hospital object
+        self.id = None
+
+        if len(args) >= 5:
+            self.date, self.doctor, self.patient, self.sickness, self.hospital = args[:5]
+        elif len(args) >= 4:
+            self.date, self.doctor, self.patient, self.sickness = args[:4]
+        elif len(args) == 3:
+            self.date, self.doctor, self.patient = args[:3]
+        elif len(args) == 2:
+            self.date, self.doctor = args[:2]
+
+        if 'date' in kwargs.keys():
+            self.date = kwargs['date']
+        if 'doctor' in kwargs.keys():
+            self.doctor = kwargs['doctor']
+        if 'patient' in kwargs.keys():
+            self.patient = kwargs['patient']
+        if 'sickness' in kwargs.keys():
+            self.sickness = kwargs['sickness']
+        if 'hospital' in kwargs.keys():
+            self.hospital = kwargs['hospital']
+        if 'id' in kwargs.keys():
+            self.id = kwargs['id']
+
+    def get_objects(self, limit: int = 100) -> list:
+        """
+        READ
+        It returns objects according to [doctor, date, sickness, patient]
+        :return: list of objects
+        """
+        try:
+            with dbapi2.connect(db_url) as connection:
+                with connection.cursor() as cursor:
+                    query = "SELECT id,date,doctor,patient,sickness,hospital FROM history"
+                    if self.doctor and self.patient:
+                        query += f" WHERE (doctor = '{self.doctor.human.tc}') AND (patient = '{self.patient.tc}') "
+                    elif self.doctor:
+                        query += f" WHERE (doctor = '{self.doctor.human.tc}') "
+                    elif self.patient:
+                        query += f" WHERE (patient = '{self.patient.tc}') "
+
+                    query += helpers.check_where_exist(query, self.date, "date = '{}'")
+                    query += helpers.check_where_exist(query, self.sickness, "sickness LIKE '%{}%'")
+
+                    if limit:
+                        query += f"LIMIT {limit}"
+
+                    cursor.execute(query)
+                    records = cursor.fetchall()  # records = [(id,city,district),(id2,city2,district2)]
+        except (Exception, dbapi2.Error) as error:
+            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+        else:
+            objects = list()
+            for id_, date, doctor_tc, patient_tc, sickness, hospital_id  in records:
+                doctor = Doctor(human=Human(tc=doctor_tc).get_object()).get_object()
+                patient = Human(tc=patient_tc).get_object()
+                hospital = Hospital(id=hospital_id).get_object()
+                objects.append(
+                    History(date=date, doctor=doctor, patient=patient, sickness=sickness,
+                             hospital=hospital, id=id_))
+            return objects
+
+    def get_object(self) -> object:
+        """
+        READ
+        It returns object according to id
+        :return: object
+        """
+        try:
+            with dbapi2.connect(db_url) as connection:
+                with connection.cursor() as cursor:
+                    query = f"SELECT id,date,doctor,patient,sickness,hospital, FROM history WHERE id = {self.id}  "
+                    cursor.execute(query)
+                    record = cursor.fetchone()  # record = (id,city,district),
+        except (Exception, dbapi2.Error) as error:
+            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+        else:
+            if record is None:
+                return None
+            else:
+                id_, date, doctor_tc, patient_tc, sickness, hospital_id  = record
+                doctor = Doctor(human=Human(tc=doctor_tc).get_object()).get_object()
+                patient = Human(tc=patient_tc).get_object()
+                hospital = Hospital(id=hospital_id).get_object()
+                history = History(date=date, doctor=doctor, patient=patient, sickness=sickness,
+                                    hospital=hospital, id=id_)  # record = (id,city,district)
+                return history
+
+    def save(self):
+        """
+        CREATE
+        It saves the object to database
+        """
+
+        try:
+            with dbapi2.connect(db_url) as connection:
+                with connection.cursor() as cursor:
+                    query = "INSERT INTO history(date, doctor, patient, sickness, hospital )" \
+                                       f" VALUES('{self.date}','{self.doctor.human.tc}','{self.patient.tc}','{self.sickness}','{self.hospital.id}') RETURNING id"
+                    cursor.execute(query)
+                    record = cursor.fetchone()
+
+        except (Exception, dbapi2.Error) as error:
+            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+
+        else:
+            self.id = record
+
+    def delete(self) -> None:
+        """
+        DELETE
+        It deletes object in database according to id
+        """
+        try:
+            with dbapi2.connect(db_url) as connection:
+                with connection.cursor() as cursor:
+                    query = f"DELETE FROM history WHERE id = '{self.id}'"
+                    cursor.execute(query)
+
+        except dbapi2.Error as error:
+            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+        except Exception as e:
+            print(e, file=sys.stderr)
+
+    def update(self, date: str = None, doctor: Doctor = None, patient: Human = None, sickness: str = None,
+               hospital: Hospital = None) -> None:
+        """
+        UPDATE
+        It updates the object according to given parameters.
+        """
+        if date is not None:
+            self.date = date
+        if doctor is not None:
+            self.doctor = doctor
+        if patient is not None:
+            self.patient = patient
+        if sickness is not None:
+            self.sickness = sickness
+        if hospital is not None:
+            self.hospital = hospital
+
+        try:
+            with dbapi2.connect(db_url) as connection:
+                with connection.cursor() as cursor:
+                    query = f"UPDATE history SET date='{self.date}', doctor='{self.doctor.human.tc}'," \
+                                       f" patient='{self.patient.tc}', sickness='{self.sickness}', " \
+                                       f"hospital='{self.hospital.id}' WHERE (id='{self.id}') "
+
+                    cursor.execute(query)
+
+        except dbapi2.Error as error:
+            print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
+        except Exception as e:
+            print(e, file=sys.stderr)
+
+    def __str__(self):
+        return f"{self.__class__.__name__}: Date:{self.date} S:{self.sickness} H:{self.hospital}"

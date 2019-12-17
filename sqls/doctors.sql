@@ -1,4 +1,4 @@
-insert into DOCTOR (HumanTC, hospital, workdays, expertise) values ('02447709917',568, '722', 'Cardiologist');
+insert into DOCTOR (HumanTC, hospital, workdays, expertise) values ('78978978978',568, '722', 'Cardiologist');
 insert into DOCTOR (HumanTC, hospital, workdays, expertise) values ('29355297945',57, '466', 'Emergency Medicine Specialist');
 insert into DOCTOR (HumanTC, hospital, workdays, expertise) values ('81042137925',128, '294', 'Anesthesiologist');
 insert into DOCTOR (HumanTC, hospital, workdays, expertise) values ('97376835830',792, '405', 'Emergency Medicine Specialist');

@@ -37,6 +37,5 @@ except Exception as e:
     print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
     sys.exit(1)
 
-#  db_url = r"postgres://ntydsvdwfqmoiz:2144b4f77e073251f835ea53468080421f0ef4508b67e64d15854221f02b09f9@ec2-54-246-100-246.eu-west-1.compute.amazonaws.com:5432/darc974mploknr"
 #  postgres//user:pw@host:port/database
 SQL_DIR = "sqls"

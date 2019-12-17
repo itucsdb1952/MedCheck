@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-info">
+  <a class="navbar-brand" href="/">
+      <img src="{{ url_for('static', filename = 'medchecklogo.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+    MedCheck
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item {% if url_for('home_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('home_page') }}">Home </a>
+      </li>
+
+    <li class="nav-item {% if url_for('admin_places_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('admin_places_page') }}">Places </a>
+      </li>
+
+      <li class="nav-item {% if url_for('admin_hospitals_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('admin_hospitals_page') }}">Hospitals </a>
+      </li>
+      <li class="nav-item {% if url_for('admin_humans_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('admin_humans_page') }}">Humans </a>
+      </li>
+        <li class="nav-item {% if url_for('how_to_use_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('how_to_use_page') }}">How to Use </a>
+      </li>
+        <li class="nav-item {% if url_for('login_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('login_page') }}">Log in </a>
+      </li>
+        <li class="nav-item  {% if url_for('register_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('register_page') }}">Register </a>
+      </li>
+        <li class="nav-item {% if url_for('hospital_patient_page') == url_for(request.endpoint) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('hospital_patient_page') }}">Hospital for Patient </a>
+      </li>
+    </ul>
+    <span class="navbar-text " style="margin-right: 20px">
+      <a href="#">Profile</a>
+    </span>
+    <span class="navbar-text">
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </span>
+  </div>
+</nav>

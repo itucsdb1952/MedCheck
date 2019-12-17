@@ -1,5 +1,5 @@
-INSERT INTO HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values('64531011652', 'adminpw','admin','Furkan','Güvenç','furkanguvenc1998@gmail.com',1,'21','178','73'); -- admin
-insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('61962476520', 'XUzHsIv6ia', 'normal', 'Zarah', 'Frome', 'zfrome0@mac.com', 753, 19, 147, 36);
+INSERT INTO HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('64531011652', 'adminpw','admin','Furkan','Güvenç','furkanguvenc1998@gmail.com',1,'21','178','73'); -- admin
+insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('12312312312', 'qwe', 'normal', 'Zarah', 'Frome', 'zfrome0@mac.com', 753, 19, 147, 36);
 insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('24029973563', 'x5sqOo0Ns', 'normal', 'Brandise', 'Doerling', 'bdoerling1@drupal.org', 707, 33, 185, 75);
 insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('38512682079', 'N7vAhdGFJIbJ', 'normal', 'Rasia', 'Friel', 'rfriel2@sfgate.com', 443, 15, 148, 56);
 insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('43943505829', 'nuNXVhM9d', 'normal', 'Ramsey', 'Gillfillan', 'rgillfillan3@ucsd.edu', 687, 49, 172, 79);
@@ -1000,7 +1000,7 @@ insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, h
 insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('78301503787', 'DxU1oRsIvZ', 'normal', 'Murial', 'Barwell', 'mbarwellrq@liveinternet.ru', 501, 51, 154, 108);
 insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('35944033906', '0ANjS21AA', 'normal', 'Vaughan', 'O''Dwyer', 'vodwyerrr@a8.net', 316, 39, 166, 111);
 -- DOCTORS
-insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('02447709917', 'B48dUtKl', 'doctor', 'Casey', 'Easey', 'ceasey0@a8.net', 437, 38, 150, 102);
+insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('78978978978', 'asd', 'doctor', 'Casey', 'Easey', 'ceasey0@a8.net', 437, 38, 150, 102);
 insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('29355297945', 'ZAlJAW', 'doctor', 'Susann', 'Wibrow', 'swibrow1@nih.gov', 376, 21, 152, 117);
 insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('81042137925', 'upBH5c6', 'doctor', 'Peter', 'Blakden', 'pblakden2@csmonitor.com', 444, 22, 177, 93);
 insert into HUMAN (tc, password, authorize, name, surname, mail, address, age, height, weight) values ('97376835830', 'TNCucL', 'doctor', 'Mahala', 'Beeby', 'mbeeby3@wikipedia.org', 463, 41, 168, 114);
