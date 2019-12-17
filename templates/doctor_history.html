@@ -11,7 +11,7 @@
             <thead class="thead-inverse">
             <tr>
                 <th>Date</th>
-                <th>Doctor</th>
+                <th>Patient</th>
                 <th>Sickness</th>
                 <th>Hospital</th>
             </tr>
@@ -20,7 +20,7 @@
             {% for history in histories %}
             <tr id="tr_{{ history.id }}">
                 <td>{{ history.date }}</td>
-                <td>{{ history.doctor.human.name }} {{ history.doctor.human.username }}</td>
+                <td>{{ history.patient.name }} {{ history.patient.surname }}</td>
                 <td>{{ history.sickness }}</td>
                 <td>{{ history.hospital.name }}</td>
             </tr>

@@ -11,10 +11,15 @@ def home_page():
     if user_auth == 'admin':
         hospitals = functions.get_hospitals_with_place()
         return render_template('admin.html', hospitals=hospitals, user_auth=user_auth)
+    elif user_auth == 'doctor':
+        doctor = Doctor(Human(tc=session['user_tc']).get_object()).get_object()
+        histories = History(doctor=doctor).get_objects()
+        return render_template("doctor_history.html", histories=histories,
+                               user_auth=session['user_auth'])  # user_auth: for navbar
     elif user_auth == 'normal':
         places = Place().get_objects(distinct_city=True)
         cities = [place.city for place in places]
-        return render_template('user_home.html',cities=cities, user_auth=user_auth)
+        return render_template('user_home.html', cities=cities, user_auth=user_auth)
 
 
 @let_to(['admin'])
@@ -73,4 +78,5 @@ def user_history_page():
     patient = Human(tc=session['user_tc']).get_object()
     histories = History(patient=patient).get_objects()
 
-    return render_template("user_history.html", histories=histories, user_auth=session['user_auth'])  # user_auth: for navbar
+    return render_template("user_history.html", histories=histories,
+                           user_auth=session['user_auth'])  # user_auth: for navbar
