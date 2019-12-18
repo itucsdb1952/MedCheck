@@ -91,7 +91,7 @@ class Place:
         except (Exception, dbapi2.Error) as error:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
         else:
-            self.id = record
+            self.id = record[0]
 
     def delete(self) -> None:
         """
@@ -246,7 +246,7 @@ class Hospital:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
 
         else:
-            self.id = record
+            self.id = record[0]
 
     def delete(self) -> None:
         """
@@ -426,7 +426,7 @@ class Human:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
                     query = "INSERT INTO human(tc, password, authorize, name, surname, mail, address, age, height, weight)" \
-                            " VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}') ".format(self.tc,
+                            " VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')  RETURNING id".format(self.tc,
                                                                                                  self.password,
                                                                                                  self.authorize,
                                                                                                  self.name,
@@ -610,7 +610,7 @@ class Doctor:
             with dbapi2.connect(db_url) as connection:
                 with connection.cursor() as cursor:
                     query = "INSERT INTO doctor(humantc,workdays,expertise,hospital,rate)" \
-                            f" VALUES('{self.human.tc}','{self.workdays}','{self.expertise}','{self.hospital.id}','{self.rate}') "
+                            f" VALUES('{self.human.tc}','{self.workdays}','{self.expertise}','{self.hospital.id}','{self.rate}')  RETURNING id"
                     cursor.execute(query)
 
         except (Exception, dbapi2.Error) as error:
@@ -784,7 +784,7 @@ class History:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
 
         else:
-            self.id = record
+            self.id = record[0]
 
     def delete(self) -> None:
         """
@@ -976,7 +976,7 @@ class Appointment:
             print(f"Error while connecting to PostgreSQL: {error}", file=sys.stderr)
 
         else:
-            self.id = record
+            self.id = record[0]
 
     def delete(self) -> None:
         """
