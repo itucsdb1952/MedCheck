@@ -29,6 +29,7 @@ class Place:
         """
         READ
         It returns objects according to city and district
+        :param:  distinct_city: cities are distinct?
         :return: list of objects
         """
         try:

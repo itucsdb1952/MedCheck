@@ -1,9 +1,10 @@
 def checkbox_to_bool(checkbox_value: str) -> bool:
-    checkbox_value = checkbox_value.lower()
-    if checkbox_value == 'on' or checkbox_value == 'true':
-        return True
-    else:
-        return False
+    if checkbox_value:
+        checkbox_value = checkbox_value.lower()
+        if checkbox_value == 'on' or checkbox_value == 'true':
+            return True
+        else:
+            return False
 
 
 def convert_to_like(column_value: str) -> str:
@@ -26,7 +27,6 @@ def check_where_exist(query: str, column: object, condition: str, like: bool = F
             column = convert_to_like(column)
         condition = condition.format(column)
         if "WHERE" in query:
-            new_query = f" AND ({condition}) "
             new_query = f" AND ({condition}) "
         else:
             new_query = f" WHERE ({condition}) "
