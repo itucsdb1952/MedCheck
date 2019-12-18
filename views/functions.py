@@ -109,7 +109,7 @@ def update_place(place_id):
     city = request.form.get('modal_city')
     district = request.form.get('modal_district')
 
-    Place(id=place_id).update(city, district)
+    Place(id=place_id).get_object().update(city, district)
     return redirect(url_for(views.admin_places_page.__name__))
 
 
@@ -166,7 +166,7 @@ def update_hospital(hospital_id):
     else:
         address = None
 
-    Hospital(id=hospital_id).update(hospital_name, address, handicapped=handicapped, park=park)
+    Hospital(id=hospital_id).get_object().update(hospital_name, address, handicapped=handicapped, park=park)
     return redirect(url_for(views.admin_hospitals_page.__name__))
 
 
@@ -224,7 +224,7 @@ def update_human(human_tc):
     else:
         address = None
 
-    Human(tc=human_tc).update(address=address, name=name, surname=surname, mail=mail, authorize=authorize)
+    Human(tc=human_tc).get_object().update(address=address, name=name, surname=surname, mail=mail, authorize=authorize)
     return redirect(url_for(views.admin_humans_page.__name__))
 
 
