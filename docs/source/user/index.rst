@@ -12,13 +12,13 @@ There are 2 user types. Doctor and patient. They can both register to the system
 
 This page welcomes new users. These information are needed to create a patient and none of them can be left empty.
 
-.. figure:: sign_in.png
+.. figure:: sign_in.PNG
     :scale: 100%
     :alt: Time to log in to the system
 
-2After you successfully register to the system you can now log in with the information you just provided.
+After you successfully register to the system you can now log in with the information you just provided.
 
-.. figure:: take_app.png
+.. figure:: take_app.PNG
     :scale: 100%
     :alt: Make an appointment
 
