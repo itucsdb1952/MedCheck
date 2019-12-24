@@ -7,6 +7,6 @@ There are 2 user types. Doctor and patient. They can both register to the system
 
 **to add a picture, use the following example**
 
-.. figure:: welcome.PNG
+.. figure:: welcome.png
     :scale: 100%
     :alt: Subtext goes here
