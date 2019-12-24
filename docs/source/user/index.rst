@@ -5,7 +5,7 @@ MedCheck is a site that especially designed to bring patients and hospitals toge
 
 There are 2 user types. Doctor and patient. They can both register to the system using sign up page and update their profiles whenever they want.
 
-**to add a picture, use the following example**::
+**to add a picture, use the following example**
 
 .. figure:: welcome.PNG
     :scale: 100%
