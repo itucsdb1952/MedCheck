@@ -7,12 +7,11 @@ There are 2 user types. Doctor and patient. They can both register to the system
 
 **to add a picture, use the following example**::
 
-   .. figure:: welcome.png
-      :scale: 50 %
-      :alt: Welcome Page
+.. figure:: welcome.png
+  :scale: 50 %
+  :alt: Welcome Page
 
-      This page welcomes you to site
+  This page welcomes you to site
 
 
 
-   
