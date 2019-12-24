@@ -6,7 +6,7 @@ MedCheck is a site that especially designed to bring patients and hospitals toge
 There are 2 user types. Doctor and patient. They can both register to the system using sign up page and update their profiles whenever they want.
 
 
-.. figure:: welcome.png
+.. figure:: welcome.PNG
     :scale: 100%
     :alt: This page welcomes new users
 
@@ -16,7 +16,7 @@ This page welcomes new users. These information are needed to create a patient a
     :scale: 100%
     :alt: Time to log in to the system
 
-After you successfully register to the system you can now log in with the information you just provided.
+2After you successfully register to the system you can now log in with the information you just provided.
 
 .. figure:: take_app.png
     :scale: 100%
