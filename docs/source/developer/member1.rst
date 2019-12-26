@@ -5,27 +5,47 @@ Parts Implemented by Furkan Guvenc
 .. code-block:: python
     :linenos:
 
-        def add_hospital(name: str = None, city: str = None, district: str = None, park: bool = False,
-                     handicapped: bool = True) -> str:
-        try:
-            with dbapi2.connect(db_url) as connection:
-                with connection.cursor() as cursor:
+    import os.path
+    import sys
 
-                    address = get_address_id(cursor, city, district)
+    DSN_efk = {'user': "postgres",  # DSN for Emre Faruk Kolaç
+               'password': "",
+               'host': "127.0.0.1",
+               'port': "5432",
+               'database': "hebe2"
+               }
 
-                    add_statement = "INSERT INTO hospital(name, address,park,handicapped) " \
-                                    "VALUES('{}',{},'{}','{}');".format(name, address, park, handicapped)
+    DSN_fg = {'user': "postgres",  # DSN for Furkan Güvenç
+              'password': "1234",
+              'host': "127.0.0.1",
+              'port': "5432",
+              'database': "hebe2"
+              }
 
-                    cursor.execute(add_statement)
-                    return "Succesfull"
+    fg_connection_url = "dbname={} user={} password={} host={} port={}".format(DSN_fg['database'], DSN_fg['user'],
+                                                                               DSN_fg['password'], DSN_fg['host'],
+                                                                               DSN_fg['port'])
 
-        except (Exception, dbapi2.Error) as error:
-            print("Error while connecting to PostgreSQL: {}".format(error), file=sys.stderr)
-            return str(error)
+    efk_connection_url = "dbname={} user={} password={} host={} port={}".format(DSN_efk['database'], DSN_efk['user'],
+                                                                                DSN_efk['password'], DSN_efk['host'],
+                                                                                DSN_efk['port'])
+    HOME_PATH = os.path.expanduser("~").lower()  # home url of pc
+    db_url = str()
 
-        finally:
-            if connection:
-                cursor.close()
-                connection.close()
+    try:
+        if 'furkan' in HOME_PATH:  # Pc of Furkan Güvenç
+            db_url = fg_connection_url
+        elif 'faruk' in HOME_PATH:  # Pc of Emre Faruk Kolaç
+            db_url = efk_connection_url
+        elif 'app' in HOME_PATH:  # Heroku
+            db_url = os.getenv("DATABASE_URL")
 
-add_hospital function called when add hospital button is clicked in admin_hospital.html file. This function takes all features that can not be NULL and creates a hospital.
+    except Exception as e:
+        print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
+        sys.exit(1)
+
+    #  postgres//user:pw@host:port/database
+    SQL_DIR = "sqls"
+
+
+/settings.py file makes required connections to database and runs "sqls" file which creates the database tables.

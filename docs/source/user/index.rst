@@ -56,7 +56,7 @@ Admins can add places by adding .csv file. On the right side places can be filte
 
 Admins can add hospitals. On the right side hospitals can be filtered by given constraints.
 
-.. figure::admin3.PNG
+.. figure:: admin3.PNG
     :scale: 100%
     :alt: admin3
 
