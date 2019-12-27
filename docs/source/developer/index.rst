@@ -1,6 +1,6 @@
 Developer Guide
 ===============
-some text
+
 Database Design
 ---------------
 .. figure:: er.png
@@ -13,7 +13,6 @@ Code implemented by Furkan
 --------------------------
 
 .. code-block:: python
-    :linenos:
 
         def add_hospital(name: str = None, city: str = None, district: str = None, park: bool = False,
                      handicapped: bool = True) -> str:
@@ -44,7 +43,6 @@ Code implemented by Emre
 -------------------------
 
 .. code-block:: python
-	:linenos:
 
 	def add_person():
 	name = request.form.get("name")
@@ -65,7 +63,6 @@ Code implemented by Emre
 Since doctors are first needed to be created as human class, first add_human function called in order to create a human.
 
 .. code-block:: python
-	:linenos:
 
 	def add_human(human_id, workdays, expertise, hospital_id):
     try:
