@@ -194,6 +194,7 @@ Python file for initializing database.
 Details will be given by furkan
 
 .. code-block:: python
+
     import psycopg2 as dbapi2
     import sys
     from settings import db_url
@@ -339,6 +340,7 @@ update: updates the object according to given parameters.
 Models are also available for doctor, human, hospital, appointment and history. They all have the same attributes with place. Early parts of the models done collectively.
 
 .. code-block:: python
+
     <!doctype html>
     <html lang="en">
     <head>
@@ -395,6 +397,7 @@ Models are also available for doctor, human, hospital, appointment and history. 
 This is the base.html which other pages are extend from.
 
 .. code-block:: python
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-info">
       <a class="navbar-brand" href="/">
           <img src="{{ url_for('static', filename = 'medchecklogo.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -443,6 +446,7 @@ This is the base.html which other pages are extend from.
 This page shows which sections admin can access. doctor_navbar.html and normal_navbar have limited authority compared to admin.
 
 .. code-block:: python
+
     {% if hospitals %}
     <br>
     <hr>
@@ -492,6 +496,7 @@ Parts Implemented by Emre Faruk Kolac
 
 
 .. code-block:: python
+
 	{% extends 'base.html' %}
 
 	{% block title %}DOCTORS{% endblock %}
@@ -760,6 +765,7 @@ admin_humans page like any other admin pages, have the authority to add new memb
 admin_places.html and admin_hospitals.html work with the same logic. They all extend from base.html
 
 .. code-block:: python
+
 	<!DOCTYPE html>
 	<html lang="en">
 	<head>
@@ -773,6 +779,7 @@ admin_places.html and admin_hospitals.html work with the same logic. They all ex
 
 403.html file is shown to user whenever they tried to access to page that they are not authorized. This works even user tries access the specific address using via internet address.
  .. code-block:: python
+
 	{% extends 'base.html' %}
 
 	{% block title %}How to Use{% endblock %}
@@ -793,6 +800,7 @@ admin_places.html and admin_hospitals.html work with the same logic. They all ex
 This page shows users how to use the application. howto.png file guides through the process of registering to the system, signing in and taking an appointment.
 
 .. code-block:: python
+
 	{% extends 'base.html' %}
 
 	{% block title %}Log In{% endblock %}
@@ -848,6 +856,7 @@ This page shows users how to use the application. howto.png file guides through 
 Log in page welcomes user if he is not recognized. Has a link to register page in case user is not registered to the system.
 
 .. code-block:: python
+
 	{% extends 'base.html' %}
 
 	{% block title %}Register{% endblock %}
