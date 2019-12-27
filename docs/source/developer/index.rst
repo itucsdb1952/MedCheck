@@ -9,10 +9,6 @@ Database Design
 Code implemented by Furkan
 --------------------------
 
-Parts Implemented by Furkan Guvenc
-==================================
-
-
 .. code-block:: python
 
     import os
@@ -485,15 +481,12 @@ This page shows which sections admin can access. doctor_navbar.html and normal_n
         </tbody>
     </table>
     {% endif %}
+
 sub_templates shows the result of search done according to doctor, place or human.
 
 
 Code implemented by Emre
 -------------------------
-
-Parts Implemented by Emre Faruk Kolac
-=====================================
-
 
 .. code-block:: python
 
@@ -777,8 +770,10 @@ admin_places.html and admin_hospitals.html work with the same logic. They all ex
 	</body>
 	</html>
 
+
 403.html file is shown to user whenever they tried to access to page that they are not authorized. This works even user tries access the specific address using via internet address.
- .. code-block:: python
+
+.. code-block:: python
 
 	{% extends 'base.html' %}
 
@@ -857,105 +852,105 @@ Log in page welcomes user if he is not recognized. Has a link to register page i
 
 .. code-block:: python
 
-	{% extends 'base.html' %}
+    {% extends 'base.html' %}
 
-	{% block title %}Register{% endblock %}
+    {% block title %}Register{% endblock %}
 
-	{% block body %}
-
-
-		<div class="container">
-			<br>
-			<h4 class="text-center">Welcome</h4>
-					<form method="POST" action="/add_person">
-						<div class="form-group row">
-							<label for="doctor_name" class="col-sm-2 col-form-label">Name:</label>
-							<div class="col-sm-10">
-								<input type="text" name="name" class="form-control" id="doctor_name" placeholder="Mehmet">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="doctor_select" class="col-sm-2 col-form-label">Surname: </label>
-							<div class="col-sm-10">
-								<input type="text" name="surname" class="form-control" id="doctor_name" placeholder="Yıldız">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="doctor_select" class="col-sm-2 col-form-label">TC: </label>
-							<div class="col-sm-10">
-								<input type="text" name="tc" class="form-control" id="doctor_name" placeholder="Must be legit TC no">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="doctor_select" class="col-sm-2 col-form-label">E-mail: </label>
-							<div class="col-sm-10">
-								<input type="text" name="email" class="form-control" id="doctor_name" placeholder="Will be used to contact">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="city_select" class="col-sm-2 col-form-label">City: </label>
-							<div class="col-sm-4">
-								<select class="form-control" name="city_select" id="city_select">
-									{% for city in cities %}
-										 <option value="{{ city }}">{{ city }}</option>
-									{% endfor %}
-
-							</select>
-							</div>
-
-							<label for="district_select" class="col-sm-2 col-form-label">District: </label>
-							<div class="col-sm-4">
-								<select class="form-control" name="district_select" id="district_select">
-									 <option value="">Choose a District</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="doctor_select" class="col-sm-2 col-form-label">Password: </label>
-							<div class="col-sm-10">
-								<input type="text" name="password" class="form-control" id="doctor_name" placeholder="Declare a password">
-							</div>
-						</div>
-						<div class="form-group row">
-							<div class="col-sm-10">
-								<button type="submit" id="hebe" class="btn btn-primary">Register</button>
-							</div>
-						</div>
-					</form>
-				</div>
+    {% block body %}
 
 
-	{% endblock %}
+        <div class="container">
+            <br>
+            <h4 class="text-center">Welcome</h4>
+                    <form method="POST" action="/add_person">
+                        <div class="form-group row">
+                            <label for="doctor_name" class="col-sm-2 col-form-label">Name:</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="name" class="form-control" id="doctor_name" placeholder="Mehmet">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="doctor_select" class="col-sm-2 col-form-label">Surname: </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="surname" class="form-control" id="doctor_name" placeholder="Yıldız">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="doctor_select" class="col-sm-2 col-form-label">TC: </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="tc" class="form-control" id="doctor_name" placeholder="Must be legit TC no">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="doctor_select" class="col-sm-2 col-form-label">E-mail: </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="email" class="form-control" id="doctor_name" placeholder="Will be used to contact">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="city_select" class="col-sm-2 col-form-label">City: </label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="city_select" id="city_select">
+                                    {% for city in cities %}
+                                         <option value="{{ city }}">{{ city }}</option>
+                                    {% endfor %}
 
-	{% block JS %}
-	<script>
+                            </select>
+                            </div>
 
-	$(document).ready(function() {
+                            <label for="district_select" class="col-sm-2 col-form-label">District: </label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="district_select" id="district_select">
+                                     <option value="">Choose a District</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="doctor_select" class="col-sm-2 col-form-label">Password: </label>
+                            <div class="col-sm-10">
+                                <input type="text" name="password" class="form-control" id="doctor_name" placeholder="Declare a password">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-10">
+                                <button type="submit" id="hebe" class="btn btn-primary">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
 
-		$('#city_select').change(function () {
+    {% endblock %}
 
-			var url = "/get_districts";
-			var city_name = $(this).val();
-			$.ajax({
-				type: 'POST',
-				url: url,
-				data: {
-					'city_name': city_name
-				},
-				success: function (data) {
-					$('#district_select').html(data);
-				}
-			});
-		});
-	});
+    {% block JS %}
+    <script>
 
-	</script>
-	{% endblock %}
+    $(document).ready(function() {
+
+
+        $('#city_select').change(function () {
+
+            var url = "/get_districts";
+            var city_name = $(this).val();
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    'city_name': city_name
+                },
+                success: function (data) {
+                    $('#district_select').html(data);
+                }
+            });
+        });
+    });
+
+    </script>
+    {% endblock %}
 
 Register page allows new users to register to system. Ajax is used to extract district information from selected city.
-.. toctree::
 
-	developer/member1
-	developer/member2
+.. toctree::
+    developer/member1
+    developer/member2
 
