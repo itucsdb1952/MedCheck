@@ -1,6 +1,6 @@
 Developer Guide
 ===============
-
+some text
 Database Design
 ---------------
 .. figure:: er.png
