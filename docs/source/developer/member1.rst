@@ -325,10 +325,150 @@ save: saves the object to database
 delete: deletes object in database according to id
 update: updates the object according to given parameters.
 
-Models are also available for doctor, human, hospital, appointment and history. They all have the same attributes with place.
+Models are also available for doctor, human, hospital, appointment and history. They all have the same attributes with place. Early parts of the models done collectively.
+
+.. code-block:: python
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <title>{% block title %}MedCheck{% endblock %}</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+        <link rel="stylesheet" href="../static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
 
 
+    </head>
+    <body>
+
+    {% if user_auth == 'admin' %}
+    {% include 'navbars/admin_navbar.html' %}
+        {% elif user_auth == 'doctor' %}
+        {% include 'navbars/doctor_navbar.html' %}
+        {% elif user_auth == 'normal' %}
+        {% include 'navbars/normal_navbar.html' %}
+    {% endif %}
 
 
+
+    {% block body %}
+
+    {% endblock %}
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <script src="../static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+
+    {% block JS %}
+
+    {% endblock %}
+
+
+    </body>
+    </html>
+
+This is the base.html which other pages are extend from.
+
+.. code-block:: python
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+      <a class="navbar-brand" href="/">
+          <img src="{{ url_for('static', filename = 'medchecklogo.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        MedCheck
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item {% if url_for('home_page') == url_for(request.endpoint) %}active{% endif %}">
+            <a class="nav-link" href="{{ url_for('home_page') }}">Home </a>
+          </li>
+
+        <li class="nav-item {% if url_for('admin_places_page') == url_for(request.endpoint) %}active{% endif %}">
+            <a class="nav-link" href="{{ url_for('admin_places_page') }}">Places </a>
+          </li>
+
+          <li class="nav-item {% if url_for('admin_hospitals_page') == url_for(request.endpoint) %}active{% endif %}">
+            <a class="nav-link" href="{{ url_for('admin_hospitals_page') }}">Hospitals </a>
+          </li>
+          <li class="nav-item {% if url_for('admin_humans_page') == url_for(request.endpoint) %}active{% endif %}">
+            <a class="nav-link" href="{{ url_for('admin_humans_page') }}">Humans </a>
+          </li>
+            <li class="nav-item {% if url_for('how_to_use_page') == url_for(request.endpoint) %}active{% endif %}">
+            <a class="nav-link" href="{{ url_for('how_to_use_page') }}">How to Use </a>
+          </li>
+            <li class="nav-item {% if url_for('login_page') == url_for(request.endpoint) %}active{% endif %}">
+            <a class="nav-link" href="{{ url_for('login_page') }}">Log in </a>
+          </li>
+            <li class="nav-item  {% if url_for('register_page') == url_for(request.endpoint) %}active{% endif %}">
+            <a class="nav-link" href="{{ url_for('register_page') }}">Register </a>
+          </li>
+            <li class="nav-item {% if url_for('hospital_patient_page') == url_for(request.endpoint) %}active{% endif %}">
+            <a class="nav-link" href="{{ url_for('hospital_patient_page') }}">Hospital for Patient </a>
+          </li>
+        </ul>
+        <span class="navbar-text " style="margin-right: 20px">
+          <a href="#">Profile</a>
+        </span>
+        <span class="navbar-text">
+          <a href="{{ url_for('logout') }}">Logout</a>
+        </span>
+      </div>
+    </nav>
+This page shows which sections admin can access. doctor_navbar.html and normal_navbar have limited authority compared to admin.
+
+.. code-block:: python
+    {% if hospitals %}
+    <br>
+    <hr>
+    <h4 class="text-center">HOSPITALS</h4>
+
+    <table class="table table-hover table-inverse">
+        <thead class="thead-inverse">
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Rate</th>
+            <th>Capacity</th>
+            <th>Handicapped</th>
+            <th>Park</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for hospital in hospitals %}
+        <tr id="tr_{{ hospital.id }}">
+            <td>{{ hospital.name }}</td>
+            <td>{{ hospital.address.city }}/{{ hospital.address.district }}</td>
+            <td>{{ hospital.rate }}</td>
+            <td>{{ hospital.capacity }}</td>
+            <td>{{ hospital.handicapped }}</td>
+            <td>{{ hospital.park }}</td>
+            <td>
+                <a data-toggle="modal" data-target="#update_modal" onclick="update_modal({{ hospital.id }});" href="#">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <a href="{{ url_for('del_hospital', hospital_id = hospital.id) }}"><i class="fa fa-trash-alt"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    {% endif %}
+sub_templates shows the result of search done according to doctor, place or human.
 
