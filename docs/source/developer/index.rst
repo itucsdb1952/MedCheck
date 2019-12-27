@@ -949,8 +949,3 @@ Log in page welcomes user if he is not recognized. Has a link to register page i
     {% endblock %}
 
 Register page allows new users to register to system. Ajax is used to extract district information from selected city.
-
-.. toctree::
-    developer/member1
-    developer/member2
-
